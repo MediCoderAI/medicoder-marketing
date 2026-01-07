@@ -86,7 +86,7 @@ function Navigation() {
             <a href="#features" className="font-medium text-medi-gray-600 hover:text-medi-green-600 transition-colors">
               Features
             </a>
-            <a href="#contact" className="btn-primary !py-3 !px-6 !text-base">
+            <a href="#pricing" className="btn-primary !py-3 !px-6 !text-base">
               Request Demo
             </a>
           </div>
@@ -111,7 +111,7 @@ function Navigation() {
             <div className="flex flex-col gap-4">
               <a href="#how-it-works" className="font-medium text-medi-gray-600 py-2">How It Works</a>
               <a href="#features" className="font-medium text-medi-gray-600 py-2">Features</a>
-              <a href="#contact" className="btn-primary text-center">Request Demo</a>
+              <a href="#pricing" className="btn-primary text-center">Request Demo</a>
             </div>
           </div>
         )}
@@ -147,7 +147,7 @@ function HeroSection() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-delay-200">
-              <a href="#contact" className="btn-primary">
+              <a href="#pricing" className="btn-primary">
                 Get Started
                 <IconArrowRight />
               </a>
@@ -327,7 +327,7 @@ function HowItWorksSection() {
             {
               step: '01',
               title: 'Upload Clinical Note',
-              desc: 'Paste or upload your clinical documentation. We support standard encounter notes, progress notes, and more.',
+              desc: 'Upload your clinical documentation. We support encounter notes, progress notes, and more.',
               icon: <IconDocument />
             },
             {
@@ -413,9 +413,9 @@ function FeaturesSection() {
               icon: '⚡'
             },
             {
-              title: 'Easy Workflow',
-              desc: 'Works with your existing workflow. No complex EHR integration required.',
-              icon: '🔌'
+              title: 'Smart De-ID',
+              desc: 'Intelligent redaction of sensitive PII data. Protect patient privacy automatically.',
+              icon: '🛡️'
             }
           ].map((item, i) => (
             <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-medi-green-500/50 transition-all duration-300 group">
@@ -537,6 +537,8 @@ function PricingSection() {
               <div className="mt-8">
                 <a
                   href="mailto:contact@medicoder.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`w-full text-center ${
                     tier.highlighted ? 'btn-primary' : 'btn-secondary'
                   } !py-3 !text-sm`}
@@ -559,7 +561,7 @@ function CTASection() {
   <p className="text-lg text-medi-gray-600 mb-6">
     Ready to learn more? Get in touch with our team.
   </p>
-  <a href="mailto:contact@medicoder.ai" className="btn-primary">
+  <a href="mailto:contact@medicoder.ai" target="_blank" rel="noopener noreferrer" className="btn-primary">
     contact@medicoder.ai
     <IconArrowRight />
   </a>
