@@ -86,49 +86,6 @@ npm run preview
    - Enter `medicoder.ai` in the Custom domain field
    - Check "Enforce HTTPS" (may take a few minutes to provision SSL)
 
-## 🎨 Tech Stack
-
-- **React 18** - UI framework
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **GitHub Actions** - CI/CD
-- **GitHub Pages** - Hosting
-
-## 📁 Project Structure
-
-```
-medicoder-marketing/
-├── public/
-│   ├── favicon.svg
-│   └── CNAME
-├── src/
-│   ├── App.jsx          # Main application component
-│   ├── index.css        # Global styles + Tailwind
-│   └── main.jsx         # React entry point
-├── .github/
-│   └── workflows/
-│       └── deploy.yml   # GitHub Actions deployment
-├── index.html
-├── package.json
-├── tailwind.config.js
-├── postcss.config.js
-└── vite.config.js
-```
-
-## 🔧 Customization
-
-### Colors
-Edit `tailwind.config.js` to modify the color palette:
-- `medi-green` - Primary brand color
-- `medi-coral` - Accent/highlight color  
-- `medi-blue` - Secondary accent
-
-### Content
-Edit `src/App.jsx` to modify:
-- Hero section copy
-- Feature descriptions
-- CTA form fields
-
 ## 📄 License
 
 © 2025 MediCoder Technologies LLC. All rights reserved.
