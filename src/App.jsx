@@ -339,7 +339,7 @@ function HowItWorksSection() {
             {
               step: '03',
               title: 'Review & Submit',
-              desc: 'Review the suggested ICD-10-CM and CPT codes, make any adjustments, and submit for billing.',
+              desc: 'Review the suggested codes, make any adjustments, and submit for billing.',
               icon: <IconCode />
             }
           ].map((item, i) => (
