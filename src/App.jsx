@@ -581,12 +581,6 @@ function Footer() {
               MediCoder<span className="text-yellow-500">.AI</span>
             </span>
           </div>
-          
-          <div className="flex items-center gap-8 text-sm text-medi-gray-400">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Contact</a>
-          </div>
         </div>
         
         <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm text-medi-gray-500">
