@@ -50,17 +50,7 @@ const IconChart = () => (
 )
 
 const IconMedical = () => (
-  <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-    <rect width="32" height="32" rx="8" fill="url(#logoGrad)"/>
-    <path d="M8 16h16M16 8v16" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-    <circle cx="16" cy="16" r="3" fill="white"/>
-    <defs>
-      <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32">
-        <stop stopColor="#22c55e"/>
-        <stop offset="1" stopColor="#16a34a"/>
-      </linearGradient>
-    </defs>
-  </svg>
+  <img src={`${import.meta.env.BASE_URL}MediCoderAIInverted.png`} alt="MediCoder.AI" className="w-8 h-8 object-contain" />
 )
 
 // Navigation Component
@@ -152,7 +142,7 @@ function HeroSection() {
             </h1>
             
             <p className="section-subheading animate-slide-up animate-delay-100">
-              Transform your clinical notes into accurate ICD-10 and CPT codes instantly. 
+              Transform your clinical notes into accurate ICD-10 and CPT/HCPCS codes instantly. 
               Purpose-built for outpatient primary care clinics.
             </p>
             
@@ -263,7 +253,7 @@ function ProblemSection() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="section-heading mb-6">
             Medical coding shouldn't be a{' '}
-            <span className="line-through text-medi-gray-400">bottleneck</span>
+            <span className="line-through text-yellow-500">bottleneck</span>
           </h2>
           <p className="section-subheading mx-auto">
             Your staff spends hours translating clinical documentation into billing codes. 
@@ -320,7 +310,7 @@ function HowItWorksSection() {
         <div className="text-center mb-20">
           <div className="badge-green mb-4 inline-flex">Simple & Powerful</div>
           <h2 className="section-heading mb-6">
-            Three steps to{' '}
+            Steps to{' '}
             <span className="gradient-text">accurate codes</span>
           </h2>
           <p className="section-subheading mx-auto">
@@ -388,7 +378,7 @@ function FeaturesSection() {
           </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mb-6">
             Everything you need,{' '}
-            <span className="text-medi-green-400">nothing you don't</span>
+            <span className="text-yellow-500">nothing you don't</span>
           </h2>
           <p className="text-xl text-medi-gray-400 max-w-3xl mx-auto">
             Focused features designed specifically for primary care outpatient coding workflows.
@@ -443,56 +433,15 @@ function FeaturesSection() {
 // CTA Section
 function CTASection() {
   return (
-    <section id="contact" className="py-24 lg:py-32 relative overflow-hidden">
-      <div className="gradient-orb gradient-orb-1" style={{ top: '50%', transform: 'translateY(-50%)' }} />
-      
-      <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative">
-        <h2 className="section-heading mb-6">
-          Ready to streamline your{' '}
-          <span className="gradient-text">coding workflow</span>?
-        </h2>
-        <p className="section-subheading mx-auto mb-10">
-          Join forward-thinking primary care clinics using MediCoder.AI to save time, 
-          reduce errors, and focus on what matters most—patient care.
-        </p>
-        
-        <div className="glass-card max-w-xl mx-auto p-8">
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="Your name"
-                className="w-full px-4 py-3 rounded-xl border border-medi-gray-200 focus:border-medi-green-500 focus:ring-2 focus:ring-medi-green-500/20 outline-none transition-all"
-              />
-              <input
-                type="email"
-                placeholder="Email address"
-                className="w-full px-4 py-3 rounded-xl border border-medi-gray-200 focus:border-medi-green-500 focus:ring-2 focus:ring-medi-green-500/20 outline-none transition-all"
-              />
-            </div>
-            <input
-              type="text"
-              placeholder="Practice name"
-              className="w-full px-4 py-3 rounded-xl border border-medi-gray-200 focus:border-medi-green-500 focus:ring-2 focus:ring-medi-green-500/20 outline-none transition-all"
-            />
-            <select className="w-full px-4 py-3 rounded-xl border border-medi-gray-200 focus:border-medi-green-500 focus:ring-2 focus:ring-medi-green-500/20 outline-none transition-all text-medi-gray-500">
-              <option value="">Monthly patient volume</option>
-              <option value="small">Under 500</option>
-              <option value="medium">500 - 2,000</option>
-              <option value="large">2,000 - 5,000</option>
-              <option value="enterprise">5,000+</option>
-            </select>
-            <button type="submit" className="btn-primary w-full">
-              Request Demo
-              <IconArrowRight />
-            </button>
-          </form>
-          <p className="text-sm text-medi-gray-400 mt-4">
-            No credit card required. We'll reach out within 24 hours.
-          </p>
-        </div>
-      </div>
-    </section>
+    <div className="max-w-xl mx-auto p-8 text-center">
+  <p className="text-lg text-medi-gray-600 mb-6">
+    Ready to learn more? Get in touch with our team.
+  </p>
+  <a href="mailto:contact@medicoder.ai" className="btn-primary">
+    contact@medicoder.ai
+    <IconArrowRight />
+  </a>
+</div>
   )
 }
 

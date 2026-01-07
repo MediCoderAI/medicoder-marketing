@@ -7,18 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary green from the app
+        // Primary color - dark navy/purple
         'medi-green': {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
+          50: '#f5f5f8',
+          100: '#e8e8ef',
+          200: '#d1d1df',
+          300: '#a8a8c4',
+          400: '#7a7aa3',
+          500: '#151324',
+          600: '#12101e',
+          700: '#0e0d18',
+          800: '#0b0a13',
+          900: '#08070e',
         },
         // Coral/orange accent for highlights
         'medi-coral': {
