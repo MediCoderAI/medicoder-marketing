@@ -24,14 +24,18 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-4 
-           bg-gradient-to-r from-medi-green-500 to-medi-green-600 
+    @apply inline-flex items-center justify-center px-8 py-4
            text-white font-display font-semibold text-lg
-           rounded-2xl shadow-lg shadow-medi-green-500/25
-           hover:shadow-xl hover:shadow-medi-green-500/30
-           hover:from-medi-green-600 hover:to-medi-green-700
+           rounded-2xl shadow-lg
            transform hover:-translate-y-0.5
            transition-all duration-300 ease-out;
+    background-color: #36364a !important;
+    box-shadow: 0 10px 15px -3px rgba(54, 54, 74, 0.25);
+  }
+
+  .btn-primary:hover {
+    background-color: #2a2a3a;
+    box-shadow: 0 20px 25px -5px rgba(54, 54, 74, 0.3);
   }
   
   .btn-secondary {
