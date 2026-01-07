@@ -381,7 +381,7 @@ function FeaturesSection() {
             <span className="text-yellow-500">nothing you don't</span>
           </h2>
           <p className="text-xl text-medi-gray-400 max-w-3xl mx-auto">
-            Focused features designed specifically for primary care outpatient coding workflows.
+            Focused features designed specifically for <br />primary care outpatient coding workflows.
           </p>
         </div>
         
@@ -492,7 +492,8 @@ function PricingSection() {
             <span className="gradient-text">fits your practice</span>
           </h2>
           <p className="section-subheading mx-auto">
-            From solo practitioners to large clinics, we have a plan designed for your needs.
+            From solo practitioners to large clinics,<br />
+            we have a plan designed for your needs.
           </p>
         </div>
 
