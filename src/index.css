@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-body text-medi-gray-800 antialiased;
+    background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+  }
+  
+  ::selection {
+    @apply bg-medi-green-200 text-medi-green-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 
+           bg-gradient-to-r from-medi-green-500 to-medi-green-600 
+           text-white font-display font-semibold text-lg
+           rounded-2xl shadow-lg shadow-medi-green-500/25
+           hover:shadow-xl hover:shadow-medi-green-500/30
+           hover:from-medi-green-600 hover:to-medi-green-700
+           transform hover:-translate-y-0.5
+           transition-all duration-300 ease-out;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4
+           bg-white text-medi-gray-800 font-display font-semibold text-lg
+           rounded-2xl border-2 border-medi-gray-200
+           hover:border-medi-green-300 hover:text-medi-green-700
+           hover:bg-medi-green-50
+           transform hover:-translate-y-0.5
+           transition-all duration-300 ease-out;
+  }
+  
+  .card {
+    @apply bg-white rounded-3xl p-8 
+           shadow-xl shadow-medi-gray-900/5
+           border border-medi-gray-100;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-3 py-1 
+           rounded-full text-sm font-medium;
+  }
+  
+  .badge-green {
+    @apply badge bg-medi-green-100 text-medi-green-700;
+  }
+  
+  .badge-blue {
+    @apply badge bg-medi-blue-100 text-medi-blue-700;
+  }
+  
+  .badge-coral {
+    @apply badge bg-medi-coral-100 text-medi-coral-700;
+  }
+  
+  .section-heading {
+    @apply font-display font-bold text-4xl md:text-5xl lg:text-6xl 
+           text-medi-gray-900 tracking-tight leading-tight;
+  }
+  
+  .section-subheading {
+    @apply font-body text-xl md:text-2xl text-medi-gray-500 
+           leading-relaxed max-w-3xl;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-medi-green-600 via-medi-green-500 to-medi-blue-500 
+           bg-clip-text text-transparent;
+  }
+  
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl rounded-3xl 
+           border border-white/20 shadow-2xl;
+  }
+}
+
+@layer utilities {
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+  .animate-delay-600 { animation-delay: 600ms; }
+  .animate-delay-700 { animation-delay: 700ms; }
+  .animate-delay-800 { animation-delay: 800ms; }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
+}
+
+/* Noise texture overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Gradient orbs */
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.gradient-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+  top: -200px;
+  right: -200px;
+}
+
+.gradient-orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+  bottom: 0;
+  left: -150px;
+}
+
+.gradient-orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+  top: 50%;
+  right: 10%;
+}
