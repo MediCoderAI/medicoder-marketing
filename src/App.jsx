@@ -481,7 +481,7 @@ function PricingSection() {
   ]
 
   return (
-    <section id="pricing" className="py-24 lg:py-32 relative overflow-hidden">
+    <section id="pricing" className="py-16 lg:py-20 relative overflow-hidden">
       <div className="gradient-orb gradient-orb-2" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
