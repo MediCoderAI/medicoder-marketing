@@ -173,7 +173,7 @@ function HeroSection() {
               </div>
               <div className="flex items-center gap-2">
                 <IconCheck />
-                <span className="text-medi-gray-600 font-medium">90%+ Accuracy</span>
+                <span className="text-medi-gray-600 font-medium">95%+ Accuracy</span>
               </div>
             </div>
           </div>
@@ -413,7 +413,7 @@ function FeaturesSection() {
               icon: '🔒'
             },
             {
-              title: '90%+ Accuracy',
+              title: '95%+ Accuracy',
               desc: 'High accuracy rates validated against certified coder benchmarks.',
               icon: '🎯'
             },
