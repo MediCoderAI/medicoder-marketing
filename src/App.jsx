@@ -142,7 +142,7 @@ function HeroSection() {
             </h1>
             
             <p className="section-subheading animate-slide-up animate-delay-100">
-              Transform your clinical notes into accurate ICD-10 and CPT/HCPCS codes instantly. 
+              Transform your clinical notes into accurate ICD-10, CPT & HCPCS codes instantly. 
               Purpose-built for outpatient primary care clinics.
             </p>
             
@@ -393,7 +393,7 @@ function FeaturesSection() {
               icon: '🩺'
             },
             {
-              title: 'ICD-10-CM & CPT/HCPCS',
+              title: 'ICD-10-CM, CPT & HCPCS',
               desc: 'Generates both diagnosis and procedure codes from a single clinical note.',
               icon: '📋'
             },
