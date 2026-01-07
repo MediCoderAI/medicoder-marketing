@@ -212,7 +212,7 @@ function HeroSection() {
               {/* Generated codes */}
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="badge-blue text-xs font-mono">GENERATED CODES</div>
+                  <div className="px-2 py-1 text-yellow-600 bg-yellow-200 text-xs font-mono rounded-full">GENERATED CODES</div>
                   <div className="h-px flex-1 bg-medi-gray-200" />
                 </div>
                 
@@ -229,7 +229,7 @@ function HeroSection() {
                         <span className="text-sm text-medi-gray-500">{item.desc}</span>
                       </div>
                       <span className={`text-xs font-medium px-2 py-1 rounded ${
-                        item.type === 'CPT' ? 'bg-medi-blue-100 text-medi-blue-700' : 'bg-medi-green-100 text-medi-green-700'
+                        item.type === 'CPT' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
                       }`}>
                         {item.type}
                       </span>
@@ -393,7 +393,7 @@ function FeaturesSection() {
               icon: '🩺'
             },
             {
-              title: 'ICD-10-CM & CPT',
+              title: 'ICD-10-CM & CPT/HCPCS',
               desc: 'Generates both diagnosis and procedure codes from a single clinical note.',
               icon: '📋'
             },
@@ -413,7 +413,7 @@ function FeaturesSection() {
               icon: '⚡'
             },
             {
-              title: 'Easy Integration',
+              title: 'Easy Workflow',
               desc: 'Works with your existing workflow. No complex EHR integration required.',
               icon: '🔌'
             }
@@ -422,6 +422,128 @@ function FeaturesSection() {
               <div className="text-4xl mb-4">{item.icon}</div>
               <h3 className="font-display font-bold text-lg mb-2 group-hover:text-medi-green-400 transition-colors">{item.title}</h3>
               <p className="text-medi-gray-400 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Pricing Section
+function PricingSection() {
+  const tiers = [
+    {
+      name: 'Free Trial',
+      description: 'Experience AI medical coding with no commitment.',
+      perks: [
+        '14-day full access trial',
+        'Email support',
+        'No credit card required',
+        'Single user access'
+      ],
+      highlighted: false,
+      badge: null
+    },
+    {
+      name: 'Basic',
+      description: 'For solo cilinicians needing precision and trusted tool.',
+      perks: [
+        'Unlimited code generation',
+        'Standard support',
+        'Single user access'
+      ],
+      highlighted: false,
+      badge: null
+    },
+    {
+      name: 'Team',
+      description: 'Ideal for growing practices that need collaborative coding workflows.',
+      perks: [
+        'All perks from previous tier',
+        'Priority support',
+        'Multi-user access (up to 5)'
+      ],
+      highlighted: true,
+      badge: 'Most Popular'
+    },
+    {
+      name: 'Business',
+      description: 'Enterprise-grade solution for high-volume clinics and organizations.',
+      perks: [
+        'All perks from previous tier',
+        'Priority support',
+        'Multi-user access (up to 10)'
+      ],
+      highlighted: false,
+      badge: null
+    }
+  ]
+
+  return (
+    <section id="pricing" className="py-24 lg:py-32 relative overflow-hidden">
+      <div className="gradient-orb gradient-orb-2" />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <div className="badge-green mb-4 inline-flex">Flexible Plans</div>
+          <h2 className="section-heading mb-6">
+            Choose the plan that{' '}
+            <span className="gradient-text">fits your practice</span>
+          </h2>
+          <p className="section-subheading mx-auto">
+            From solo practitioners to large clinics, we have a plan designed for your needs.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {tiers.map((tier, i) => (
+            <div
+              key={i}
+              className={`relative card group hover:scale-105 transition-all duration-300 ${
+                tier.highlighted
+                  ? 'ring-2 ring-medi-green-500 shadow-xl shadow-medi-green-500/20'
+                  : ''
+              }`}
+            >
+              {tier.badge && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="badge-green text-xs font-semibold px-4 py-1">
+                    {tier.badge}
+                  </span>
+                </div>
+              )}
+
+              <div className="text-center mb-6">
+                <h3 className="font-display font-bold text-2xl text-medi-gray-900 mb-2">
+                  {tier.name}
+                </h3>
+                <p className="text-medi-gray-500 text-sm leading-relaxed">
+                  {tier.description}
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {tier.perks.map((perk, j) => (
+                  <div key={j} className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-medi-green-100 flex items-center justify-center mt-0.5">
+                      <IconCheck />
+                    </div>
+                    <span className="text-medi-gray-600 text-sm">{perk}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8">
+                <a
+                  href="mailto:contact@medicoder.ai"
+                  className={`w-full text-center ${
+                    tier.highlighted ? 'btn-primary' : 'btn-secondary'
+                  } !py-3 !text-sm`}
+                >
+                  Get Started
+                </a>
+              </div>
             </div>
           ))}
         </div>
@@ -454,7 +576,7 @@ function Footer() {
           <div className="flex items-center gap-3">
             <IconMedical />
             <span className="font-display font-bold text-xl">
-              MediCoder<span className="text-medi-green-400">.AI</span>
+              MediCoder<span className="text-yellow-500">.AI</span>
             </span>
           </div>
           
@@ -485,6 +607,7 @@ export default function App() {
         <ProblemSection />
         <HowItWorksSection />
         <FeaturesSection />
+        <PricingSection />
         <CTASection />
       </main>
       <Footer />
