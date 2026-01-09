@@ -50,7 +50,7 @@ const IconChart = () => (
 )
 
 const IconMedical = () => (
-  <img src={`${import.meta.env.BASE_URL}MediCoderAIInverted.png`} alt="MediCoder.AI" className="w-8 h-8 object-contain" />
+  <img src={`${import.meta.env.BASE_URL}MediCoderAIInverted.png`} alt="MediCoder.AI" className="w-8 h-8 object-contain rounded-lg" />
 )
 
 // Navigation Component
