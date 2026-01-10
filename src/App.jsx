@@ -339,7 +339,7 @@ function HowItWorksSection() {
             {
               step: '03',
               title: 'Review & Submit',
-              desc: 'Review the suggested codes, make any adjustments, and submit for billing.',
+              desc: 'Review suggested codes and apply any necessary adjustments seamlessly in your existing billing workflow.',
               icon: <IconCode />
             }
           ].map((item, i) => (
