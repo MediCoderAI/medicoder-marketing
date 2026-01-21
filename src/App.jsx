@@ -537,7 +537,7 @@ function PricingSection() {
 
               <div className="mt-8">
                 <a
-                  href="mailto:contact@medicoder.ai"
+                  href="https://calendly.com/samuel-han-medicoder/book-a-consultation"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`w-full text-center ${
@@ -557,16 +557,37 @@ function PricingSection() {
 
 // CTA Section
 function CTASection() {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText('contact@medicoder.ai')
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy email:', err)
+    }
+  }
+
   return (
-    <div className="max-w-xl mx-auto p-8 text-center">
-  <p className="text-lg text-medi-gray-600 mb-6">
-    Ready to learn more? Get in touch with our team.
-  </p>
-  <a href="mailto:contact@medicoder.ai" target="_blank" rel="noopener noreferrer" className="btn-primary">
-    contact@medicoder.ai
-    <IconArrowRight />
-  </a>
-</div>
+    <div className="max-w-xl mx-auto p-8 text-center relative">
+      {/* Copied notification banner */}
+      <div className={`fixed top-24 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
+        copied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+      }`}>
+        <div className="bg-medi-green-500 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg">
+          Copied!
+        </div>
+      </div>
+
+      <p className="text-lg text-medi-gray-600 mb-6">
+        Ready to learn more? Get in touch with our team.
+      </p>
+      <button onClick={handleCopyEmail} className="btn-primary">
+        contact@medicoder.ai
+        <IconArrowRight />
+      </button>
+    </div>
   )
 }
 
