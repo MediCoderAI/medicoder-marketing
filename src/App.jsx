@@ -389,7 +389,7 @@ function FeaturesSection() {
           {[
             {
               title: 'Primary Care Focused',
-              desc: 'Optimized for family medicine, internal medicine, and general practice encounter types.',
+              desc: 'Purpose-built for family medicine, internal medicine, pediatrics, geriatrics, and telehealth specialties.',
               icon: '🩺'
             },
             {
