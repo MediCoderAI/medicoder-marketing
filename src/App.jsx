@@ -6,13 +6,18 @@ function useScrollReveal() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    // Adjust threshold and rootMargin for mobile devices
+    const isMobile = window.innerWidth < 768
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
         }
       },
-      { threshold: 0.25, rootMargin: '0px 0px -300px 0px' }
+      {
+        threshold: isMobile ? 0.1 : 0.25,
+        rootMargin: isMobile ? '0px 0px -100px 0px' : '0px 0px -300px 0px'
+      }
     )
 
     if (ref.current) {
@@ -929,8 +934,8 @@ export default function App() {
       <IntroScreen />
       <div className="noise-overlay" />
 
-      {/* Gradient orbs - positioned globally to flow across sections */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{zIndex: 1}}>
+      {/* Gradient orbs - positioned to follow sections */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 1}}>
         <div className="gradient-orb gradient-orb-1" />
         <div className="gradient-orb gradient-orb-2" />
         <div className="gradient-orb gradient-orb-3" />
