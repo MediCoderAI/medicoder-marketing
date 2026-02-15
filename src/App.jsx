@@ -82,6 +82,63 @@ const IconMedical = () => (
   <img src={`${import.meta.env.BASE_URL}MediCoderAIInverted.png`} alt="MediCoder.AI" className="w-8 h-8 object-contain rounded-lg" />
 )
 
+// Intro Screen Component - Swipes up on load with typewriter effect
+function IntroScreen() {
+  const [isVisible, setIsVisible] = useState(true)
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false)
+  const [displayedText, setDisplayedText] = useState('')
+  const fullText = 'MediCoder.AI'
+  const typingSpeed = 80 // milliseconds per character
+
+  useEffect(() => {
+    let currentIndex = 0
+
+    // Typewriter effect
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex))
+        currentIndex++
+      } else {
+        clearInterval(typingInterval)
+        // Wait 800ms after typing completes, then swipe up
+        setTimeout(() => {
+          handleDismiss()
+        }, 800)
+      }
+    }, typingSpeed)
+
+    return () => clearInterval(typingInterval)
+  }, [])
+
+  const handleDismiss = () => {
+    setIsAnimatingOut(true)
+    setTimeout(() => {
+      setIsVisible(false)
+    }, 800) // Match animation duration
+  }
+
+  if (!isVisible) return null
+
+  return (
+    <div
+      className={`fixed inset-0 z-[100] flex items-center justify-center bg-[#f6f0e9] transition-all duration-700 ease-out ${
+        isAnimatingOut ? 'translate-y-[-100%] opacity-0' : 'translate-y-0 opacity-100'
+      }`}
+      onClick={handleDismiss}
+    >
+      {/* Main content - Just the title */}
+      <div className="relative z-10 text-center px-4">
+        <h1 className="text-5xl md:text-7xl font-bold text-medi-gray-900 tracking-tight">
+          {displayedText}
+          {displayedText.length < fullText.length && (
+            <span className="inline-block w-0.5 h-12 md:h-16 bg-medi-gray-900 ml-1 animate-pulse" />
+          )}
+        </h1>
+      </div>
+    </div>
+  )
+}
+
 // Navigation Component
 function Navigation() {
   const [scrolled, setScrolled] = useState(false)
@@ -191,22 +248,22 @@ function HeroSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 badge-green animate-fade-in">
+            <div className="inline-flex items-center gap-2 badge-green animate-swipe-up">
               <span className="w-2 h-2 bg-medi-green-500 rounded-full animate-pulse" />
               Built for Primary Care
             </div>
 
-            <h1 className="section-heading animate-slide-up text-balance">
+            <h1 className="section-heading animate-swipe-up animate-delay-100 text-balance">
               Medical coding on{' '}
               <span className="gradient-text">autopilot</span>
             </h1>
 
-            <p className="section-subheading animate-slide-up animate-delay-100">
+            <p className="section-subheading animate-swipe-up animate-delay-200">
               Transform your clinical notes into accurate ICD-10, CPT & HCPCS codes instantly.
               Purpose-built for outpatient primary care clinics.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-delay-200">
+            <div className="flex flex-col sm:flex-row gap-4 animate-swipe-up animate-delay-300">
               <a href="#pricing" className="btn-primary">
                 Get Started
                 <IconArrowRight />
@@ -216,7 +273,7 @@ function HeroSection() {
               </a>
             </div>
 
-            <div className="flex items-center gap-8 pt-4 animate-fade-in animate-delay-300">
+            <div className="flex items-center gap-8 pt-4 animate-swipe-up animate-delay-400">
               <div className="flex items-center gap-2">
                 <IconCheck />
                 <span className="text-medi-gray-600 font-medium">HIPAA Compliant</span>
@@ -229,7 +286,7 @@ function HeroSection() {
           </div>
 
           {/* Hero Visual - Animated Code Preview */}
-          <div className="relative animate-scale-in animate-delay-300">
+          <div className="relative animate-swipe-up animate-delay-500">
             <div className="absolute inset-0 rounded-3xl blur-3xl animate-glow-pulse" style={{
               background: 'linear-gradient(to right, rgba(21, 19, 36, 0.2), rgba(238, 204, 111, 0.3), rgba(249, 115, 22, 0.1))'
             }} />
@@ -729,20 +786,65 @@ function CTASection() {
 // Footer
 function Footer() {
   return (
-    <footer className="bg-medi-gray-900 text-white py-16">
+    <footer className="bg-[#f6f0e9] py-20 border-t border-[#2b180a]/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-3">
-            <IconMedical />
-            <span className="font-display font-bold text-xl">
-              MediCoder<span className="text-yellow-500">.AI</span>
-            </span>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          {/* Brand Section */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center gap-3">
+              <IconMedical />
+              <span className="font-display font-bold text-2xl text-[#2b180a]">
+                MediCoder<span className="text-medi-green-500">.AI</span>
+              </span>
+            </div>
+            <p className="text-[#2b180a]/70 font-medium text-lg leading-relaxed max-w-md">
+              Built for primary care. Designed for simplicity.
+            </p>
+            <p className="text-[#2b180a]/60 text-sm leading-relaxed max-w-md">
+              Transform your clinical notes into accurate medical codes with AI-powered automation.
+            </p>
+          </div>
+
+          {/* Links Section - Product */}
+          <div>
+            <h3 className="font-display font-bold text-[#2b180a] mb-4">Product</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href="#features" className="text-[#2b180a]/70 hover:text-[#2b180a] transition-colors text-sm">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#pricing" className="text-[#2b180a]/70 hover:text-[#2b180a] transition-colors text-sm">
+                  Pricing
+                </a>
+              </li>
+              <li>
+                <a href="#how-it-works" className="text-[#2b180a]/70 hover:text-[#2b180a] transition-colors text-sm">
+                  How It Works
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Links Section - Company */}
+          <div>
+            <h3 className="font-display font-bold text-[#2b180a] mb-4">Company</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href="https://calendly.com/samuel-han-medicoder/book-a-consultation" target="_blank" rel="noopener noreferrer" className="text-[#2b180a]/70 hover:text-[#2b180a] transition-colors text-sm">
+                  Contact
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-        
-        <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm text-medi-gray-500">
-          <p>&copy; {new Date().getFullYear()} MediCoder Technologies LLC. All rights reserved.</p>
-          <p className="mt-2">Built for primary care. Designed for simplicity.</p>
+
+        {/* Bottom Section */}
+        <div className="border-t border-[#2b180a]/10 pt-8">
+          <p className="text-center text-sm text-[#2b180a]/50">
+            &copy; {new Date().getFullYear()} MediCoder Technologies LLC. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
@@ -753,6 +855,7 @@ function Footer() {
 export default function App() {
   return (
     <div className="relative">
+      <IntroScreen />
       <div className="noise-overlay" />
       <Navigation />
       <main className="relative">
