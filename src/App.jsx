@@ -241,10 +241,6 @@ function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background elements */}
-      <div className="gradient-orb gradient-orb-1" />
-      <div className="gradient-orb gradient-orb-2" />
-
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
@@ -491,8 +487,6 @@ function HowItWorksSection() {
 
   return (
     <section ref={ref} id="how-it-works" className="py-24 lg:py-32 relative overflow-hidden">
-      <div className="gradient-orb gradient-orb-3" />
-
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left side - Heading */}
@@ -549,29 +543,21 @@ function FeaturesSection() {
   const [ref, isVisible] = useScrollReveal()
 
   return (
-    <section ref={ref} id="features" className="py-24 lg:py-32 text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-medi-gray-900 -z-10" />
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
-      </div>
-      
+    <section ref={ref} id="features" className="py-24 lg:py-32 relative overflow-hidden bg-gradient-to-b from-white via-medi-gray-50/30 to-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
         <div className={`text-center mb-20 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-          <div className="badge bg-medi-green-500/20 text-medi-green-400 mb-4 inline-flex">
+          <div className="badge-green mb-4 inline-flex">
             Built for Healthcare
           </div>
-          <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mb-6">
+          <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mb-6 text-medi-gray-900">
             Everything you need,{' '}
-            <span className="text-yellow-500">nothing you don't</span>
+            <span className="gradient-text">nothing you don't</span>
           </h2>
-          <p className="text-xl text-medi-gray-400 max-w-3xl mx-auto">
-            Focused features designed specifically for <br />primary care outpatient coding workflows.
+          <p className="text-xl text-medi-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Focused features designed specifically for primary care outpatient coding workflows.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
@@ -605,10 +591,14 @@ function FeaturesSection() {
               icon: '🛡️'
             }
           ].map((item, i) => (
-            <div key={i} className={`p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 group backdrop-blur-sm hover:shadow-lg hover:shadow-medi-green-500/10 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: `${i * 100}ms`}}>
-              <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="font-display font-bold text-lg mb-2 group-hover:text-medi-green-400 transition-colors">{item.title}</h3>
-              <p className="text-medi-gray-400 text-sm leading-relaxed">{item.desc}</p>
+            <div
+              key={i}
+              className={`glass-card p-8 rounded-2xl border border-medi-gray-200/50 hover:border-medi-green-500/30 transition-all duration-500 group hover:shadow-xl hover:shadow-medi-green-500/5 hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              style={{transitionDelay: `${i * 100}ms`}}
+            >
+              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
+              <h3 className="font-display font-bold text-xl mb-3 text-medi-gray-900 group-hover:text-medi-green-500 transition-colors">{item.title}</h3>
+              <p className="text-medi-gray-600 text-sm leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -670,8 +660,6 @@ function PricingSection() {
 
   return (
     <section ref={ref} id="pricing" className="py-16 lg:py-20 relative overflow-hidden">
-      <div className="gradient-orb gradient-orb-2" />
-
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
           <div className="badge-green mb-4 inline-flex">Flexible Plans</div>
@@ -853,10 +841,27 @@ function Footer() {
 
 // Main App
 export default function App() {
+  // Scroll to top on page load/refresh
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    // Disable browser's automatic scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+  }, [])
+
   return (
     <div className="relative">
       <IntroScreen />
       <div className="noise-overlay" />
+
+      {/* Gradient orbs - positioned globally to flow across sections */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{zIndex: 1}}>
+        <div className="gradient-orb gradient-orb-1" />
+        <div className="gradient-orb gradient-orb-2" />
+        <div className="gradient-orb gradient-orb-3" />
+      </div>
+
       <Navigation />
       <main className="relative">
         <div className="fixed inset-0 pointer-events-none" style={{zIndex: -20}}>
