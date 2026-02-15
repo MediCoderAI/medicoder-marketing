@@ -164,12 +164,12 @@ function HeroSection() {
   ]
 
   useEffect(() => {
-    // Step 0: Show note (3s)
+    // Step 0: Show note with paste animation (1.5s)
     // Step 1: Show process button (2s)
     // Step 1.5: Button click effect (200ms)
     // Step 2: Processing (2s)
     // Step 3: Show all codes at once (3s)
-    const timings = [3000, 2000, 200, 2000, 3000]
+    const timings = [1500, 2000, 200, 2000, 3000]
 
     const timer = setTimeout(() => {
       if (animationStep === 4) {
@@ -243,10 +243,18 @@ function HeroSection() {
               <div className={`space-y-4 transition-all duration-500 ${animationStep >= 4 ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
                 <div className="flex items-center gap-3">
                   <div className="badge-green text-xs font-mono">CLINICAL NOTE</div>
+                  {animationStep === 0 && (
+                    <div className="flex items-center gap-1.5 text-medi-gray-400 text-xs animate-fade-in">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      <span className="font-medium">Pasted</span>
+                    </div>
+                  )}
                   <div className="h-px flex-1 bg-medi-gray-200" />
                 </div>
 
-                <div className="font-body text-medi-gray-700 leading-relaxed">
+                <div className={`font-body text-medi-gray-700 leading-relaxed ${animationStep === 0 ? 'animate-slide-up' : ''}`}>
                   <p className="mb-3">
                     73-year-old male presents for annual check-up. History of{' '}
                     <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 py-0.5 rounded font-medium">
