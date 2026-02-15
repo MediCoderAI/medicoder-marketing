@@ -266,26 +266,24 @@
   }
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - beige to white gradient */
 ::-webkit-scrollbar {
   width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(245, 245, 245, 0.5);
-  backdrop-filter: blur(10px);
+  background: #faf6f2;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(21, 19, 36, 0.8) 0%, rgba(59, 130, 246, 0.6) 50%, rgba(21, 19, 36, 0.8) 100%);
+  background: linear-gradient(180deg, #e8d3c0 0%, #ffffff 100%);
   border-radius: 6px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(21, 19, 36, 0.2);
+  border: 2px solid #faf6f2;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(21, 19, 36, 0.9) 0%, rgba(59, 130, 246, 0.7) 50%, rgba(21, 19, 36, 0.9) 100%);
-  box-shadow: 0 4px 12px rgba(21, 19, 36, 0.3);
+  background: linear-gradient(180deg, #d4b5a0 0%, #f6f0e9 100%);
 }
 
 /* Noise texture overlay */
