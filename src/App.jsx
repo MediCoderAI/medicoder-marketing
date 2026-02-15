@@ -771,6 +771,80 @@ function CTASection() {
   )
 }
 
+// Testimonials Section
+function TestimonialsSection() {
+  const [ref, isVisible] = useScrollReveal()
+
+  const testimonials = [
+    {
+      quote: "MediCoder.AI is an all-in-one product for healthcare professionals interested in primary care computer assisted coding.",
+      name: "Arnold Almirez",
+      role: "Outpatient Coding Manager",
+      image: null // Can add image URL later
+    }
+    // Add more testimonials here in the future
+  ]
+
+  return (
+    <section ref={ref} className="py-24 lg:py-32 relative overflow-hidden bg-gradient-to-b from-white via-medi-gray-50/30 to-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className="badge-green mb-4 inline-flex">
+            Testimonials
+          </div>
+          <h2 className="font-display font-bold text-4xl md:text-5xl mb-6 text-medi-gray-900">
+            Trusted by{' '}
+            <span className="gradient-text">healthcare professionals</span>
+          </h2>
+          <p className="text-xl text-medi-gray-600 max-w-3xl mx-auto leading-relaxed">
+            See what coding professionals are saying about MediCoder.AI
+          </p>
+        </div>
+
+        {/* Testimonial Grid - responsive: 1 column on mobile, 2 columns on md, 3 columns on lg */}
+        <div className={`grid md:grid-cols-${testimonials.length >= 2 ? '2' : '1'} lg:grid-cols-${testimonials.length >= 3 ? '3' : testimonials.length} gap-8 ${testimonials.length === 1 ? 'max-w-2xl mx-auto' : ''}`}>
+          {testimonials.map((testimonial, i) => (
+            <div
+              key={i}
+              className={`glass-card pt-8 px-8 rounded-2xl border border-medi-gray-200/50 hover:border-medi-green-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-medi-green-500/5 hover:-translate-y-1 flex flex-col ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              style={{transitionDelay: `${i * 100}ms`}}
+            >
+              {/* Author Info - Now at top */}
+              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-medi-gray-200/50">
+                {/* Avatar - placeholder or image */}
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-medi-green-500 to-medi-green-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                  {testimonial.image ? (
+                    <img src={testimonial.image} alt={testimonial.name} className="w-full h-full rounded-full object-cover" />
+                  ) : (
+                    testimonial.name.split(' ').map(n => n[0]).join('')
+                  )}
+                </div>
+
+                {/* Name and Role */}
+                <div>
+                  <div className="font-display font-bold text-medi-gray-900">{testimonial.name}</div>
+                  <div className="text-sm text-medi-gray-600">{testimonial.role}</div>
+                </div>
+              </div>
+
+              {/* Quote Text with large quote marks around it */}
+              <blockquote className="text-medi-gray-700 text-lg leading-relaxed relative mb-0">
+                <span className="text-6xl text-medi-green-500/20 absolute -top-4 -left-2 leading-none font-serif">"</span>
+                <span className="relative z-10 block pt-6">
+                  {testimonial.quote}
+                </span>
+                <span className="text-6xl text-medi-green-500/20 block text-right leading-none font-serif mt-2">"</span>
+              </blockquote>
+            </div>
+          ))}
+        </div>
+
+        {/* Future-proof: When you have more testimonials, the grid will automatically adjust */}
+      </div>
+    </section>
+  )
+}
+
 // Footer
 function Footer() {
   return (
@@ -873,6 +947,7 @@ export default function App() {
         <FeaturesSection />
         <PricingSection />
         <CTASection />
+        <TestimonialsSection />
       </main>
       <Footer />
     </div>
