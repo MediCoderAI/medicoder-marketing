@@ -218,16 +218,37 @@ function Navigation() {
 function HeroSection() {
   const [animationStep, setAnimationStep] = useState(0)
   const [showOverlay, setShowOverlay] = useState(true)
-  const [isMobile, setIsMobile] = useState(false)
+  const [scrollOffset, setScrollOffset] = useState(0)
+  const [containerHeight, setContainerHeight] = useState(550)
+  const scrollContainerRef = useRef(null)
+  const generatedCodesRef = useRef(null)
+  const visibleContentRef = useRef(null)
+  const outerContainerRef = useRef(null)
 
-  // Detect mobile screen size
+  // Dynamically measure scroll offset and container height based on actual content
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+    if (!generatedCodesRef.current || !scrollContainerRef.current) return
+
+    const measure = () => {
+      // Measure how far to scroll to show generated codes at top
+      setScrollOffset(generatedCodesRef.current.offsetTop)
+
+      // Measure visible content (clinical note + button area) to set container height
+      if (visibleContentRef.current && outerContainerRef.current) {
+        const styles = getComputedStyle(outerContainerRef.current)
+        const paddingTop = parseFloat(styles.paddingTop)
+        const paddingBottom = parseFloat(styles.paddingBottom)
+        const contentHeight = visibleContentRef.current.scrollHeight
+        setContainerHeight(contentHeight + paddingTop + paddingBottom)
+      }
     }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+
+    measure()
+
+    const observer = new ResizeObserver(measure)
+    observer.observe(scrollContainerRef.current)
+
+    return () => observer.disconnect()
   }, [])
 
   const codes = [
@@ -313,7 +334,8 @@ function HeroSection() {
             <div className="absolute inset-0 rounded-3xl blur-3xl animate-glow-pulse" style={{
               background: 'linear-gradient(to right, rgba(21, 19, 36, 0.2), rgba(238, 204, 111, 0.3), rgba(249, 115, 22, 0.1))'
             }} />
-            <div className="relative glass-card p-4 md:p-8 gradient-border h-[450px] md:h-[550px]" style={{
+            <div ref={outerContainerRef} className="relative glass-card p-4 md:p-8 gradient-border" style={{
+              height: `${containerHeight}px`,
               overflow: 'hidden'
             }}>
               {/* Play Overlay */}
@@ -338,12 +360,14 @@ function HeroSection() {
               )}
 
               {/* Scrollable content container with focus shift */}
-              <div className="transition-transform duration-1000 ease-out" style={{
-                transform: animationStep >= 4 ? (isMobile ? 'translateY(-415px)' : 'translateY(-425px)') : 'translateY(0)',
+              <div ref={scrollContainerRef} className="transition-transform duration-1000 ease-out" style={{
+                transform: animationStep >= 4 ? `translateY(-${scrollOffset}px)` : 'translateY(0)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: isMobile ? '1rem' : '1.5rem'
+                gap: 'clamp(0.25rem, 1.25vw, 0.5rem)'
               }}>
+                {/* Visible content area - measured for container height */}
+                <div ref={visibleContentRef}>
                 {/* Clinical Note Section - Always visible */}
                 <div className="space-y-2 md:space-y-4 transition-all duration-500">
                 <div className="flex items-center gap-2 md:gap-3">
@@ -390,7 +414,7 @@ function HeroSection() {
               </div>
 
                 {/* Process Button / Loading States */}
-                <div className="flex justify-center py-0.1 md:py-2">
+                <div className="flex justify-center py-0.1 md:py-2 min-h-[44px] md:min-h-[52px] items-center">
                   {animationStep === 1 ? (
                     <button className="btn-primary !py-2 md:!py-3 !px-4 md:!px-6 !text-sm md:!text-base animate-scale-in">
                       <IconBolt />
@@ -418,13 +442,14 @@ function HeroSection() {
                     <div className="w-px h-8 bg-medi-gray-200 transition-all duration-500" />
                   ) : null}
                 </div>
+                </div>
 
                 {/* Generated Codes Section - Hidden until step 4 */}
-                <div className={`space-y-2 md:space-y-3 flex-1 transition-opacity duration-500 ${
+                <div ref={generatedCodesRef} className={`space-y-2 md:space-y-3 flex-1 overflow-hidden transition-opacity duration-500 ${
                   animationStep >= 4 ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}>
                   <div className="flex items-center gap-2 md:gap-3">
-                    <div className={`px-1.5 md:px-2 py-0.5 md:py-1 text-xs md:text-sm font-mono rounded-full transition-all duration-500 ${
+                    <div className={`px-1.5 md:px-2 py-0.5 md:py-1 text-xs md:text-sm font-mono rounded-full whitespace-nowrap transition-all duration-500 ${
                       animationStep >= 4 ? 'text-yellow-600 bg-yellow-200' : 'text-medi-gray-400 bg-medi-gray-100'
                     }`}>
                       GENERATED CODES
@@ -432,23 +457,21 @@ function HeroSection() {
                     <div className="h-px flex-1 bg-medi-gray-200" />
                   </div>
 
-                  <div className="grid gap-2">
+                  <div className="grid gap-1.5 md:gap-2 overflow-hidden">
                     {animationStep >= 4 ? (
                       codes.map((item, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between p-2.5 md:p-4 bg-medi-gray-50 rounded-lg md:rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10"
+                          className="flex items-center flex-nowrap p-2 md:p-4 bg-medi-gray-50 rounded-lg md:rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10 min-w-0 overflow-hidden"
                           style={{
                             animation: 'slideUp 0.6s ease-out forwards',
                             animationDelay: `${i * 100}ms`,
                             opacity: 0
                           }}
                         >
-                          <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
-                            <span className="font-mono font-semibold text-medi-gray-900 text-sm md:text-base flex-shrink-0">{item.code}</span>
-                            <span className="text-xs md:text-sm text-medi-gray-500 truncate">{item.desc}</span>
-                          </div>
-                          <span className={`text-xs md:text-sm font-medium px-2 md:px-2.5 py-0.5 md:py-1 rounded flex-shrink-0 ml-2 md:ml-3 ${
+                          <span className="font-mono font-semibold text-medi-gray-900 text-xs md:text-base flex-shrink-0 whitespace-nowrap">{item.code}</span>
+                          <span className="text-xs md:text-sm text-medi-gray-500 truncate mx-1.5 md:mx-4 flex-1 min-w-[3rem]">{item.desc}</span>
+                          <span className={`text-[10px] md:text-sm font-medium px-1 md:px-2.5 py-0.5 md:py-1 rounded flex-shrink-0 whitespace-nowrap ${
                             item.type === 'CPT' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
                           }`}>
                             {item.type}
@@ -460,13 +483,13 @@ function HeroSection() {
                       [0, 1, 2, 3].map((i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between p-4 bg-medi-gray-50/30 rounded-xl transition-all duration-500"
+                          className="flex items-center justify-between p-2 md:p-4 bg-medi-gray-50/30 rounded-lg md:rounded-xl transition-all duration-500"
                         >
-                          <div className="flex items-center gap-4 flex-1">
-                            <div className="h-5 w-20 bg-medi-gray-200/50 rounded animate-pulse" />
-                            <div className="h-5 flex-1 bg-medi-gray-200/50 rounded animate-pulse" />
+                          <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+                            <div className="h-4 md:h-5 w-14 md:w-20 bg-medi-gray-200/50 rounded animate-pulse flex-shrink-0" />
+                            <div className="h-4 md:h-5 flex-1 bg-medi-gray-200/50 rounded animate-pulse" />
                           </div>
-                          <div className="h-6 w-20 bg-medi-gray-200/50 rounded animate-pulse" />
+                          <div className="h-5 md:h-6 w-16 md:w-20 bg-medi-gray-200/50 rounded animate-pulse flex-shrink-0 ml-2" />
                         </div>
                       ))
                   )}
