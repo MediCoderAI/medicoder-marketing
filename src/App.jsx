@@ -218,6 +218,17 @@ function Navigation() {
 function HeroSection() {
   const [animationStep, setAnimationStep] = useState(0)
   const [showOverlay, setShowOverlay] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const codes = [
     { code: 'I10', desc: 'Essential hypertension', type: 'ICD-10-CM' },
@@ -302,21 +313,20 @@ function HeroSection() {
             <div className="absolute inset-0 rounded-3xl blur-3xl animate-glow-pulse" style={{
               background: 'linear-gradient(to right, rgba(21, 19, 36, 0.2), rgba(238, 204, 111, 0.3), rgba(249, 115, 22, 0.1))'
             }} />
-            <div className="relative glass-card p-8 gradient-border" style={{
-              height: '550px',
+            <div className="relative glass-card p-4 md:p-8 gradient-border h-[450px] md:h-[550px]" style={{
               overflow: 'hidden'
             }}>
               {/* Play Overlay */}
               {showOverlay && (
                 <div className="absolute inset-0 flex items-center justify-center bg-white/95 backdrop-blur-sm rounded-3xl z-10 transition-all duration-500">
-                  <div className="text-center space-y-6 px-8">
-                    <h3 className="font-display font-bold text-3xl md:text-4xl text-medi-gray-900">
+                  <div className="text-center space-y-4 md:space-y-6 px-4 md:px-8">
+                    <h3 className="font-display font-bold text-2xl md:text-3xl lg:text-4xl text-medi-gray-900">
                       Experience Instant<br />
                       <span className="gradient-text">Medical Coding</span>
                     </h3>
                     <button
                       onClick={handlePlayClick}
-                      className="group inline-flex items-center gap-3 btn-primary !py-4 !px-8 !text-base hover:scale-105 active:scale-95 transition-all duration-300"
+                      className="group inline-flex items-center gap-2 md:gap-3 btn-primary !py-3 md:!py-4 !px-6 md:!px-8 !text-sm md:!text-base hover:scale-105 active:scale-95 transition-all duration-300"
                     >
                       <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
@@ -329,15 +339,15 @@ function HeroSection() {
 
               {/* Scrollable content container with focus shift */}
               <div className="transition-transform duration-1000 ease-out" style={{
-                transform: animationStep >= 4 ? 'translateY(-450px)' : 'translateY(0)',
+                transform: animationStep >= 4 ? (isMobile ? 'translateY(-415px)' : 'translateY(-425px)') : 'translateY(0)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '1.5rem'
+                gap: isMobile ? '1rem' : '1.5rem'
               }}>
                 {/* Clinical Note Section - Always visible */}
-                <div className="space-y-4 transition-all duration-500">
-                <div className="flex items-center gap-3">
-                  <div className="badge-green text-sm font-mono">CLINICAL NOTE</div>
+                <div className="space-y-2 md:space-y-4 transition-all duration-500">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="badge-green text-xs md:text-sm font-mono">CLINICAL NOTE</div>
                   {animationStep === 0 && (
                     <div className="flex items-center gap-1.5 text-medi-gray-400 text-sm animate-fade-in">
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -349,28 +359,28 @@ function HeroSection() {
                   <div className="h-px flex-1 bg-medi-gray-200" />
                 </div>
 
-                <div className={`font-body text-medi-gray-700 leading-relaxed text-base ${animationStep === 0 ? 'animate-slide-up' : ''}`}>
-                  <p className="mb-3">
+                <div className={`font-body text-medi-gray-700 leading-relaxed text-sm md:text-base ${animationStep === 0 ? 'animate-slide-up' : ''}`}>
+                  <p className="mb-2 md:mb-3">
                     <strong>Chief Complaint:</strong> 73-year-old male presents for{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 md:px-2 py-0.5 md:py-1 rounded font-medium text-xs md:text-sm">
                       annual preventive visit
                     </span>. No acute complaints today.
                   </p>
-                  <p className="mb-3">
+                  <p className="mb-2 md:mb-3">
                     <strong>History:</strong> Past medical history significant for{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 md:px-2 py-0.5 md:py-1 rounded font-medium text-xs md:text-sm">
                       coronary artery disease
                     </span>{' '}
                     with drug-eluting stent placement 04/2022. Currently on aspirin, Plavix, atorvastatin, and lisinopril for{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 md:px-2 py-0.5 md:py-1 rounded font-medium text-xs md:text-sm">
                       hypertension
                     </span>{' '}
                     and{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 md:px-2 py-0.5 md:py-1 rounded font-medium text-xs md:text-sm">
                       hyperlipidemia
                     </span>. Patient reports excellent medication adherence.
                   </p>
-                  <p className="mb-3">
+                  <p className="mb-2 md:mb-3">
                     <strong>Vitals:</strong> BP 128/82, HR 72, RR 16, SpO2 98% on room air. BMI 26.4.
                   </p>
                   <p>
@@ -380,29 +390,29 @@ function HeroSection() {
               </div>
 
                 {/* Process Button / Loading States */}
-                <div className="flex justify-center py-2">
+                <div className="flex justify-center py-0.1 md:py-2">
                   {animationStep === 1 ? (
-                    <button className="btn-primary !py-3 !px-6 !text-base animate-scale-in">
+                    <button className="btn-primary !py-2 md:!py-3 !px-4 md:!px-6 !text-sm md:!text-base animate-scale-in">
                       <IconBolt />
                       Process Note
                     </button>
                   ) : animationStep === 2 ? (
-                    <button className="btn-primary !py-3 !px-6 !text-base scale-95 opacity-80 transition-all duration-200">
+                    <button className="btn-primary !py-2 md:!py-3 !px-4 md:!px-6 !text-sm md:!text-base scale-95 opacity-80 transition-all duration-200">
                       <IconBolt />
                       Process Note
                     </button>
                   ) : animationStep === 3 ? (
-                    <div className="flex items-center gap-3 animate-fade-in">
-                      <div className="w-3 h-3 rounded-full animate-pulse" style={{
+                    <div className="flex items-center gap-2 md:gap-3 animate-fade-in">
+                      <div className="w-2.5 md:w-3 h-2.5 md:h-3 rounded-full animate-pulse" style={{
                         background: 'linear-gradient(135deg, rgba(238, 204, 111, 1), rgba(218, 165, 32, 1))'
                       }} />
-                      <div className="w-3 h-3 rounded-full animate-pulse animation-delay-200" style={{
+                      <div className="w-2.5 md:w-3 h-2.5 md:h-3 rounded-full animate-pulse animation-delay-200" style={{
                         background: 'linear-gradient(135deg, rgba(222, 184, 135, 1), rgba(238, 204, 111, 1))'
                       }} />
-                      <div className="w-3 h-3 rounded-full animate-pulse animation-delay-400" style={{
+                      <div className="w-2.5 md:w-3 h-2.5 md:h-3 rounded-full animate-pulse animation-delay-400" style={{
                         background: 'linear-gradient(135deg, rgba(218, 165, 32, 1), rgba(222, 184, 135, 1))'
                       }} />
-                      <span className="text-medi-gray-600 font-medium ml-2 text-base">Processing...</span>
+                      <span className="text-medi-gray-600 font-medium ml-1 md:ml-2 text-sm md:text-base">Processing...</span>
                     </div>
                   ) : animationStep >= 4 ? (
                     <div className="w-px h-8 bg-medi-gray-200 transition-all duration-500" />
@@ -410,11 +420,11 @@ function HeroSection() {
                 </div>
 
                 {/* Generated Codes Section - Hidden until step 4 */}
-                <div className={`space-y-3 flex-1 transition-opacity duration-500 ${
+                <div className={`space-y-2 md:space-y-3 flex-1 transition-opacity duration-500 ${
                   animationStep >= 4 ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}>
-                  <div className="flex items-center gap-3">
-                    <div className={`px-2 py-1 text-sm font-mono rounded-full transition-all duration-500 ${
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className={`px-1.5 md:px-2 py-0.5 md:py-1 text-xs md:text-sm font-mono rounded-full transition-all duration-500 ${
                       animationStep >= 4 ? 'text-yellow-600 bg-yellow-200' : 'text-medi-gray-400 bg-medi-gray-100'
                     }`}>
                       GENERATED CODES
@@ -427,18 +437,18 @@ function HeroSection() {
                       codes.map((item, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between p-4 bg-medi-gray-50 rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10"
+                          className="flex items-center justify-between p-2.5 md:p-4 bg-medi-gray-50 rounded-lg md:rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10"
                           style={{
                             animation: 'slideUp 0.6s ease-out forwards',
                             animationDelay: `${i * 100}ms`,
                             opacity: 0
                           }}
                         >
-                          <div className="flex items-center gap-4 flex-1 min-w-0">
-                            <span className="font-mono font-semibold text-medi-gray-900 text-base flex-shrink-0">{item.code}</span>
-                            <span className="text-sm text-medi-gray-500 truncate">{item.desc}</span>
+                          <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+                            <span className="font-mono font-semibold text-medi-gray-900 text-sm md:text-base flex-shrink-0">{item.code}</span>
+                            <span className="text-xs md:text-sm text-medi-gray-500 truncate">{item.desc}</span>
                           </div>
-                          <span className={`text-sm font-medium px-2.5 py-1 rounded flex-shrink-0 ml-3 ${
+                          <span className={`text-xs md:text-sm font-medium px-2 md:px-2.5 py-0.5 md:py-1 rounded flex-shrink-0 ml-2 md:ml-3 ${
                             item.type === 'CPT' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
                           }`}>
                             {item.type}
