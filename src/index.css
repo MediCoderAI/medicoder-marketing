@@ -347,7 +347,7 @@
 .gradient-orb-1 {
   width: 800px;
   height: 800px;
-  background: radial-gradient(circle, rgba(238, 204, 111, 0.7) 0%, rgba(250, 235, 215, 0.4) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(230, 220, 200, 0.6) 0%, rgba(245, 235, 220, 0.35) 40%, transparent 70%);
   top: -300px;
   right: -300px;
   animation: gradient-shift 20s ease-in-out infinite, pulse-glow 5s ease-in-out infinite;
@@ -356,7 +356,7 @@
 .gradient-orb-2 {
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(222, 184, 135, 0.65) 0%, rgba(238, 204, 111, 0.45) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(222, 207, 187, 0.55) 0%, rgba(230, 220, 200, 0.4) 40%, transparent 70%);
   top: -200px;
   left: -250px;
   animation: gradient-shift 25s ease-in-out infinite reverse, pulse-glow 6s ease-in-out infinite;
@@ -366,9 +366,36 @@
 .gradient-orb-3 {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(218, 165, 32, 0.6) 0%, rgba(222, 184, 135, 0.4) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(210, 195, 175, 0.5) 0%, rgba(222, 207, 187, 0.35) 40%, transparent 70%);
   top: 40%;
   right: 5%;
   animation: gradient-rotate 30s linear infinite, pulse-glow 7s ease-in-out infinite;
   animation-delay: 5s;
+}
+
+/* Mobile responsive gradient orbs */
+@media (max-width: 768px) {
+  .gradient-orb-1 {
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    right: -100px;
+    opacity: 0.4;
+  }
+
+  .gradient-orb-2 {
+    width: 250px;
+    height: 250px;
+    top: -80px;
+    left: -80px;
+    opacity: 0.4;
+  }
+
+  .gradient-orb-3 {
+    width: 200px;
+    height: 200px;
+    top: 30%;
+    right: -50px;
+    opacity: 0.3;
+  }
 }
