@@ -217,24 +217,30 @@ function Navigation() {
 // Hero Section
 function HeroSection() {
   const [animationStep, setAnimationStep] = useState(0)
+  const [showOverlay, setShowOverlay] = useState(true)
 
   const codes = [
     { code: 'I10', desc: 'Essential hypertension', type: 'ICD-10-CM' },
-    { code: 'I25.111', desc: 'Atherosclerotic heart disease with angina', type: 'ICD-10-CM' },
+    { code: 'I25.111', desc: 'Coronary artery disease with angina', type: 'ICD-10-CM' },
     { code: 'E78.5', desc: 'Hyperlipidemia, unspecified', type: 'ICD-10-CM' },
     { code: '99397', desc: 'Preventive medicine, established patient', type: 'CPT' },
   ]
 
   useEffect(() => {
+    // Only run animation when overlay is hidden
+    if (showOverlay) return
+
     // Step 0: Show note with paste animation (1.5s)
-    // Step 1: Show process button (2s)
-    // Step 1.5: Button click effect (200ms)
-    // Step 2: Processing (2s)
-    // Step 3: Show all codes at once (3s)
-    const timings = [1500, 2000, 200, 2000, 3000]
+    // Step 1: Button appears (1s)
+    // Step 2: Button clicked (200ms)
+    // Step 3: Processing (2s)
+    // Step 4: Focus shift to codes + populate (3s)
+    const timings = [1500, 1000, 200, 2000, 3000]
 
     const timer = setTimeout(() => {
       if (animationStep === 4) {
+        // After completing animation, show overlay again
+        setShowOverlay(true)
         setAnimationStep(0)
       } else {
         setAnimationStep(animationStep + 1)
@@ -242,7 +248,12 @@ function HeroSection() {
     }, timings[animationStep])
 
     return () => clearTimeout(timer)
-  }, [animationStep])
+  }, [animationStep, showOverlay])
+
+  const handlePlayClick = () => {
+    setShowOverlay(false)
+    setAnimationStep(0)
+  }
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
@@ -292,18 +303,44 @@ function HeroSection() {
               background: 'linear-gradient(to right, rgba(21, 19, 36, 0.2), rgba(238, 204, 111, 0.3), rgba(249, 115, 22, 0.1))'
             }} />
             <div className="relative glass-card p-8 gradient-border" style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.5rem',
-              transition: 'all 500ms ease-out'
+              height: '550px',
+              overflow: 'hidden'
             }}>
-              {/* Mock clinical note */}
-              <div className={`space-y-4 transition-all duration-500 ${animationStep >= 4 ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
+              {/* Play Overlay */}
+              {showOverlay && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/95 backdrop-blur-sm rounded-3xl z-10 transition-all duration-500">
+                  <div className="text-center space-y-6 px-8">
+                    <h3 className="font-display font-bold text-3xl md:text-4xl text-medi-gray-900">
+                      Experience Instant<br />
+                      <span className="gradient-text">Medical Coding</span>
+                    </h3>
+                    <button
+                      onClick={handlePlayClick}
+                      className="group inline-flex items-center gap-3 btn-primary !py-4 !px-8 !text-base hover:scale-105 active:scale-95 transition-all duration-300"
+                    >
+                      <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                      Watch Demo
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Scrollable content container with focus shift */}
+              <div className="transition-transform duration-1000 ease-out" style={{
+                transform: animationStep >= 4 ? 'translateY(-450px)' : 'translateY(0)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem'
+              }}>
+                {/* Clinical Note Section - Always visible */}
+                <div className="space-y-4 transition-all duration-500">
                 <div className="flex items-center gap-3">
-                  <div className="badge-green text-xs font-mono">CLINICAL NOTE</div>
+                  <div className="badge-green text-sm font-mono">CLINICAL NOTE</div>
                   {animationStep === 0 && (
-                    <div className="flex items-center gap-1.5 text-medi-gray-400 text-xs animate-fade-in">
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <div className="flex items-center gap-1.5 text-medi-gray-400 text-sm animate-fade-in">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
                       <span className="font-medium">Pasted</span>
@@ -312,92 +349,120 @@ function HeroSection() {
                   <div className="h-px flex-1 bg-medi-gray-200" />
                 </div>
 
-                <div className={`font-body text-medi-gray-700 leading-relaxed ${animationStep === 0 ? 'animate-slide-up' : ''}`}>
+                <div className={`font-body text-medi-gray-700 leading-relaxed text-base ${animationStep === 0 ? 'animate-slide-up' : ''}`}>
                   <p className="mb-3">
-                    73-year-old male presents for annual check-up. History of{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 py-0.5 rounded font-medium">
+                    <strong>Chief Complaint:</strong> 73-year-old male presents for{' '}
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
+                      annual preventive visit
+                    </span>. No acute complaints today.
+                  </p>
+                  <p className="mb-3">
+                    <strong>History:</strong> Past medical history significant for{' '}
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
                       coronary artery disease
                     </span>{' '}
-                    with stent placement 04/2022.
-                  </p>
-                  <p>
-                    Current medications for{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 py-0.5 rounded font-medium">
+                    with drug-eluting stent placement 04/2022. Currently on aspirin, Plavix, atorvastatin, and lisinopril for{' '}
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
                       hypertension
                     </span>{' '}
                     and{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 py-0.5 rounded font-medium">
+                    <span className="bg-medi-coral-100 text-medi-coral-700 px-2 py-1 rounded font-medium">
                       hyperlipidemia
-                    </span>.
+                    </span>. Patient reports excellent medication adherence.
+                  </p>
+                  <p className="mb-3">
+                    <strong>Vitals:</strong> BP 128/82, HR 72, RR 16, SpO2 98% on room air. BMI 26.4.
+                  </p>
+                  <p>
+                    <strong>Assessment:</strong> Stable cardiovascular disease, well-controlled on current regimen. Continue current medications. Recommended annual cardiac stress test. Patient educated on diet and exercise.
                   </p>
                 </div>
               </div>
 
-              {/* Process Button / Click Effect / Loading / Arrow */}
-              <div className="flex justify-center py-2">
-                {animationStep === 1 ? (
-                  <button className="btn-primary !py-3 !px-6 !text-sm animate-scale-in">
-                    <IconBolt />
-                    Process Note
-                  </button>
-                ) : animationStep === 2 ? (
-                  <button className="btn-primary !py-3 !px-6 !text-sm scale-95 opacity-80 transition-all duration-200">
-                    <IconBolt />
-                    Process Note
-                  </button>
-                ) : animationStep === 3 ? (
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full animate-pulse" style={{
-                      background: 'linear-gradient(135deg, rgba(238, 204, 111, 1), rgba(218, 165, 32, 1))'
-                    }} />
-                    <div className="w-3 h-3 rounded-full animate-pulse animation-delay-200" style={{
-                      background: 'linear-gradient(135deg, rgba(222, 184, 135, 1), rgba(238, 204, 111, 1))'
-                    }} />
-                    <div className="w-3 h-3 rounded-full animate-pulse animation-delay-400" style={{
-                      background: 'linear-gradient(135deg, rgba(218, 165, 32, 1), rgba(222, 184, 135, 1))'
-                    }} />
-                    <span className="text-medi-gray-600 font-medium ml-2">Processing...</span>
-                  </div>
-                ) : animationStep >= 4 ? (
-                  <svg className="w-8 h-8 text-medi-green-500 animate-scale-in" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
-                ) : null}
-              </div>
+                {/* Process Button / Loading States */}
+                <div className="flex justify-center py-2">
+                  {animationStep === 1 ? (
+                    <button className="btn-primary !py-3 !px-6 !text-base animate-scale-in">
+                      <IconBolt />
+                      Process Note
+                    </button>
+                  ) : animationStep === 2 ? (
+                    <button className="btn-primary !py-3 !px-6 !text-base scale-95 opacity-80 transition-all duration-200">
+                      <IconBolt />
+                      Process Note
+                    </button>
+                  ) : animationStep === 3 ? (
+                    <div className="flex items-center gap-3 animate-fade-in">
+                      <div className="w-3 h-3 rounded-full animate-pulse" style={{
+                        background: 'linear-gradient(135deg, rgba(238, 204, 111, 1), rgba(218, 165, 32, 1))'
+                      }} />
+                      <div className="w-3 h-3 rounded-full animate-pulse animation-delay-200" style={{
+                        background: 'linear-gradient(135deg, rgba(222, 184, 135, 1), rgba(238, 204, 111, 1))'
+                      }} />
+                      <div className="w-3 h-3 rounded-full animate-pulse animation-delay-400" style={{
+                        background: 'linear-gradient(135deg, rgba(218, 165, 32, 1), rgba(222, 184, 135, 1))'
+                      }} />
+                      <span className="text-medi-gray-600 font-medium ml-2 text-base">Processing...</span>
+                    </div>
+                  ) : animationStep >= 4 ? (
+                    <div className="w-px h-8 bg-medi-gray-200 transition-all duration-500" />
+                  ) : null}
+                </div>
 
-              {/* Generated codes - appear all at once */}
-              {animationStep >= 4 && (
-                <div className="space-y-3 animate-slide-up">
+                {/* Generated Codes Section - Hidden until step 4 */}
+                <div className={`space-y-3 flex-1 transition-opacity duration-500 ${
+                  animationStep >= 4 ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}>
                   <div className="flex items-center gap-3">
-                    <div className="px-2 py-1 text-yellow-600 bg-yellow-200 text-xs font-mono rounded-full">GENERATED CODES</div>
+                    <div className={`px-2 py-1 text-sm font-mono rounded-full transition-all duration-500 ${
+                      animationStep >= 4 ? 'text-yellow-600 bg-yellow-200' : 'text-medi-gray-400 bg-medi-gray-100'
+                    }`}>
+                      GENERATED CODES
+                    </div>
                     <div className="h-px flex-1 bg-medi-gray-200" />
                   </div>
 
                   <div className="grid gap-2">
-                    {codes.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between p-3 bg-medi-gray-50 rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10"
-                        style={{
-                          animation: 'slideUp 0.6s ease-out forwards',
-                          animationDelay: `${i * 100}ms`,
-                          opacity: 0
-                        }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="font-mono font-semibold text-medi-gray-900">{item.code}</span>
-                          <span className="text-sm text-medi-gray-500">{item.desc}</span>
+                    {animationStep >= 4 ? (
+                      codes.map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between p-4 bg-medi-gray-50 rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10"
+                          style={{
+                            animation: 'slideUp 0.6s ease-out forwards',
+                            animationDelay: `${i * 100}ms`,
+                            opacity: 0
+                          }}
+                        >
+                          <div className="flex items-center gap-4 flex-1 min-w-0">
+                            <span className="font-mono font-semibold text-medi-gray-900 text-base flex-shrink-0">{item.code}</span>
+                            <span className="text-sm text-medi-gray-500 truncate">{item.desc}</span>
+                          </div>
+                          <span className={`text-sm font-medium px-2.5 py-1 rounded flex-shrink-0 ml-3 ${
+                            item.type === 'CPT' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                          }`}>
+                            {item.type}
+                          </span>
                         </div>
-                        <span className={`text-xs font-medium px-2 py-1 rounded ${
-                          item.type === 'CPT' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                        }`}>
-                          {item.type}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                      ))
+                    ) : (
+                      // Placeholder skeleton states
+                      [0, 1, 2, 3].map((i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between p-4 bg-medi-gray-50/30 rounded-xl transition-all duration-500"
+                        >
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className="h-5 w-20 bg-medi-gray-200/50 rounded animate-pulse" />
+                            <div className="h-5 flex-1 bg-medi-gray-200/50 rounded animate-pulse" />
+                          </div>
+                          <div className="h-6 w-20 bg-medi-gray-200/50 rounded animate-pulse" />
+                        </div>
+                      ))
+                  )}
                 </div>
-              )}
+              </div>
+              </div>
             </div>
           </div>
         </div>
