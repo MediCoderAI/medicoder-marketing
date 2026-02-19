@@ -410,18 +410,35 @@ function HeroSection() {
               </div>
 
               {/* Play overlay */}
-              <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center rounded-3xl transition-all duration-500 ${
+              <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center rounded-3xl overflow-hidden transition-all duration-500 ${
                 isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
               }`} style={{ background: '#f3ede7' }}>
-                <p className="font-display font-semibold text-medi-gray-700 text-sm sm:text-base mb-4">Watch a note become revenue</p>
+                {/* Gradient orbs */}
+                <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full opacity-60 pointer-events-none" style={{
+                  background: 'radial-gradient(circle, rgba(230, 220, 200, 0.8) 0%, rgba(245, 235, 220, 0.4) 40%, transparent 70%)',
+                  filter: 'blur(40px)',
+                  animation: 'gradient-shift 20s ease-in-out infinite'
+                }} />
+                <div className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full opacity-50 pointer-events-none" style={{
+                  background: 'radial-gradient(circle, rgba(222, 207, 187, 0.7) 0%, rgba(230, 220, 200, 0.4) 40%, transparent 70%)',
+                  filter: 'blur(40px)',
+                  animation: 'gradient-shift 25s ease-in-out infinite reverse'
+                }} />
+                <div className="absolute top-1/3 -left-10 w-32 h-32 rounded-full opacity-40 pointer-events-none" style={{
+                  background: 'radial-gradient(circle, rgba(238, 204, 111, 0.3) 0%, transparent 70%)',
+                  filter: 'blur(30px)',
+                  animation: 'gradient-rotate 30s linear infinite'
+                }} />
+                <h3 className="relative font-display font-bold text-medi-gray-900 mb-6 text-center tracking-tight"><span className="text-3xl sm:text-4xl">Watch a note</span><br /><span className="text-2xl sm:text-3xl">become <span className="gradient-text">revenue</span></span></h3>
                 <button
                   onClick={handlePlay}
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-xl shadow-medi-green-500/30 hover:shadow-2xl hover:shadow-medi-green-500/40 hover:scale-110 transition-all duration-300"
-                  style={{ background: 'linear-gradient(135deg, #36364a 0%, #151324 100%)' }}
+                  className="relative inline-flex items-center gap-2.5 px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-display font-semibold text-white text-sm sm:text-base hover:-translate-y-1 hover:shadow-2xl hover:shadow-medi-green-500/30 transition-all duration-300"
+                  style={{ background: 'linear-gradient(135deg, #36364a 0%, #151324 100%)', boxShadow: '0 10px 30px -5px rgba(54, 54, 74, 0.4)' }}
                 >
-                  <svg className="w-7 h-7 sm:w-8 sm:h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
+                  Watch Demo
                 </button>
               </div>
             </div>
