@@ -35,12 +35,6 @@ function useScrollReveal() {
 }
 
 // Icons as inline SVG components
-const IconCode = () => (
-  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-  </svg>
-)
-
 const IconDocument = () => (
   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -181,7 +175,7 @@ function Navigation() {
               Features
             </a>
             <a href="#pricing" className="btn-primary !py-3 !px-6 !text-base">
-              Request Demo
+              Try Free Audit
             </a>
           </div>
 
@@ -205,7 +199,7 @@ function Navigation() {
             <div className="flex flex-col gap-4">
               <a href="#how-it-works" className="font-medium text-medi-gray-600 py-2">How It Works</a>
               <a href="#features" className="font-medium text-medi-gray-600 py-2">Features</a>
-              <a href="#pricing" className="btn-primary text-center">Request Demo</a>
+              <a href="#pricing" className="btn-primary text-center">Try Free Audit</a>
             </div>
           </div>
         )}
@@ -217,32 +211,33 @@ function Navigation() {
 // Hero Section
 function HeroSection() {
   const [animationStep, setAnimationStep] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(false)
 
-  const codes = [
-    { code: 'I10', desc: 'Essential hypertension', type: 'ICD-10-CM' },
-    { code: 'I25.111', desc: 'Atherosclerotic heart disease with angina', type: 'ICD-10-CM' },
-    { code: 'E78.5', desc: 'Hyperlipidemia, unspecified', type: 'ICD-10-CM' },
-    { code: '99397', desc: 'Preventive medicine, established patient', type: 'CPT' },
+  const hccResults = [
+    { code: 'HCC 85', desc: 'Congestive Heart Failure', raf: '+0.323', status: 'Missed' },
+    { code: 'HCC 18', desc: 'Diabetes with Chronic Complications', raf: '+0.302', status: 'Missed' },
+    { code: 'HCC 85', desc: 'Coronary Artery Disease', raf: '+0.141', status: 'Captured' },
+    { code: 'HCC 22', desc: 'Morbid Obesity', raf: '+0.250', status: 'Missed' },
   ]
 
   useEffect(() => {
-    // Step 0: Show note with paste animation (1.5s)
-    // Step 1: Show process button (2s)
-    // Step 1.5: Button click effect (200ms)
-    // Step 2: Processing (2s)
-    // Step 3: Show all codes at once (3s)
-    const timings = [1500, 2000, 200, 2000, 3000]
-
+    if (!isPlaying) return
+    const timings = [1500, 2000, 200, 2000, 4000]
     const timer = setTimeout(() => {
       if (animationStep === 4) {
-        setAnimationStep(0)
+        setIsPlaying(false)
+        setTimeout(() => setAnimationStep(0), 600)
       } else {
         setAnimationStep(animationStep + 1)
       }
     }, timings[animationStep])
-
     return () => clearTimeout(timer)
-  }, [animationStep])
+  }, [animationStep, isPlaying])
+
+  const handlePlay = () => {
+    setAnimationStep(0)
+    setIsPlaying(true)
+  }
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
@@ -251,22 +246,22 @@ function HeroSection() {
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 badge-green animate-swipe-up">
               <span className="w-2 h-2 bg-medi-green-500 rounded-full animate-pulse" />
-              Built for Primary Care
+              Zero Integration. Instant Results.
             </div>
 
             <h1 className="section-heading animate-swipe-up animate-delay-100 text-balance">
-              Medical coding on{' '}
-              <span className="gradient-text">autopilot</span>
+              Find the revenue your clinical notes are{' '}
+              <span className="gradient-text">leaving behind</span>
             </h1>
 
             <p className="section-subheading animate-swipe-up animate-delay-200">
-              Transform your clinical notes into accurate ICD-10, CPT & HCPCS codes instantly.
-              Purpose-built for outpatient primary care clinics.
+              Upload notes. Surface missed HCCs. See the dollar impact.
+              No EHR integration required.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 animate-swipe-up animate-delay-300">
               <a href="#pricing" className="btn-primary">
-                Get Started
+                Upload Notes Free
                 <IconArrowRight />
               </a>
               <a href="#how-it-works" className="btn-secondary">
@@ -281,124 +276,178 @@ function HeroSection() {
               </div>
               <div className="flex items-center gap-2">
                 <IconCheck />
-                <span className="text-medi-gray-600 font-medium">95%+ Accuracy</span>
+                <span className="text-medi-gray-600 font-medium">No EHR Integration Required</span>
               </div>
             </div>
           </div>
 
-          {/* Hero Visual - Animated Code Preview */}
+          {/* Hero Visual - Animated HCC/RAF Preview */}
           <div className="relative animate-swipe-up animate-delay-500">
             <div className="absolute inset-0 rounded-3xl blur-3xl animate-glow-pulse" style={{
               background: 'linear-gradient(to right, rgba(21, 19, 36, 0.2), rgba(238, 204, 111, 0.3), rgba(249, 115, 22, 0.1))'
             }} />
-            <div className="relative glass-card p-8 gradient-border" style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.5rem',
-              transition: 'all 500ms ease-out'
-            }}>
-              {/* Mock clinical note */}
-              <div className={`space-y-4 transition-all duration-500 ${animationStep >= 4 ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
-                <div className="flex items-center gap-3">
-                  <div className="badge-green text-xs font-mono">CLINICAL NOTE</div>
-                  {animationStep === 0 && (
-                    <div className="flex items-center gap-1.5 text-medi-gray-400 text-xs animate-fade-in">
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                      </svg>
-                      <span className="font-medium">Pasted</span>
-                    </div>
-                  )}
-                  <div className="h-px flex-1 bg-medi-gray-200" />
-                </div>
-
-                <div className={`font-body text-medi-gray-700 leading-relaxed ${animationStep === 0 ? 'animate-slide-up' : ''}`}>
-                  <p className="mb-3">
-                    73-year-old male presents for annual check-up. History of{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 py-0.5 rounded font-medium">
-                      coronary artery disease
-                    </span>{' '}
-                    with stent placement 04/2022.
-                  </p>
-                  <p>
-                    Current medications for{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 py-0.5 rounded font-medium">
-                      hypertension
-                    </span>{' '}
-                    and{' '}
-                    <span className="bg-medi-coral-100 text-medi-coral-700 px-1.5 py-0.5 rounded font-medium">
-                      hyperlipidemia
-                    </span>.
-                  </p>
-                </div>
-              </div>
-
-              {/* Process Button / Click Effect / Loading / Arrow */}
-              <div className="flex justify-center py-2">
-                {animationStep === 1 ? (
-                  <button className="btn-primary !py-3 !px-6 !text-sm animate-scale-in">
-                    <IconBolt />
-                    Process Note
-                  </button>
-                ) : animationStep === 2 ? (
-                  <button className="btn-primary !py-3 !px-6 !text-sm scale-95 opacity-80 transition-all duration-200">
-                    <IconBolt />
-                    Process Note
-                  </button>
-                ) : animationStep === 3 ? (
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full animate-pulse" style={{
-                      background: 'linear-gradient(135deg, rgba(238, 204, 111, 1), rgba(218, 165, 32, 1))'
-                    }} />
-                    <div className="w-3 h-3 rounded-full animate-pulse animation-delay-200" style={{
-                      background: 'linear-gradient(135deg, rgba(222, 184, 135, 1), rgba(238, 204, 111, 1))'
-                    }} />
-                    <div className="w-3 h-3 rounded-full animate-pulse animation-delay-400" style={{
-                      background: 'linear-gradient(135deg, rgba(218, 165, 32, 1), rgba(222, 184, 135, 1))'
-                    }} />
-                    <span className="text-medi-gray-600 font-medium ml-2">Processing...</span>
-                  </div>
-                ) : animationStep >= 4 ? (
-                  <svg className="w-8 h-8 text-medi-green-500 animate-scale-in" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
-                ) : null}
-              </div>
-
-              {/* Generated codes - appear all at once */}
-              {animationStep >= 4 && (
-                <div className="space-y-3 animate-slide-up">
-                  <div className="flex items-center gap-3">
-                    <div className="px-2 py-1 text-yellow-600 bg-yellow-200 text-xs font-mono rounded-full">GENERATED CODES</div>
-                    <div className="h-px flex-1 bg-medi-gray-200" />
-                  </div>
-
-                  <div className="grid gap-2">
-                    {codes.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between p-3 bg-medi-gray-50 rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10"
-                        style={{
-                          animation: 'slideUp 0.6s ease-out forwards',
-                          animationDelay: `${i * 100}ms`,
-                          opacity: 0
-                        }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="font-mono font-semibold text-medi-gray-900">{item.code}</span>
-                          <span className="text-sm text-medi-gray-500">{item.desc}</span>
+            <div className="relative glass-card gradient-border overflow-hidden h-[480px] sm:h-[420px]">
+              {/* Sliding content wrapper */}
+              <div className="absolute inset-0 p-4 sm:p-8 transition-transform duration-700 ease-in-out" style={{
+                transform: animationStep >= 4 ? 'translateY(-100%)' : 'translateY(0)'
+              }}>
+                {/* === Slide 1: Clinical Note + Action === */}
+                <div style={{ height: '100%' }} className="flex flex-col">
+                  {/* Mock clinical note */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="badge-green text-[10px] sm:text-xs font-mono">CLINICAL NOTE</div>
+                      {animationStep === 0 && (
+                        <div className="flex items-center gap-1.5 text-medi-gray-400 text-xs animate-fade-in">
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                          </svg>
+                          <span className="font-medium">Pasted</span>
                         </div>
-                        <span className={`text-xs font-medium px-2 py-1 rounded ${
-                          item.type === 'CPT' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                        }`}>
-                          {item.type}
-                        </span>
+                      )}
+                      <div className="h-px flex-1 bg-medi-gray-200" />
+                    </div>
+
+                    <div className={`font-body text-medi-gray-700 leading-relaxed text-sm sm:text-base ${animationStep === 0 ? 'animate-slide-up' : ''}`}>
+                      <p className="mb-3">
+                        73-year-old male presents for annual check-up. History of{' '}
+                        <span className="bg-medi-coral-100 text-medi-coral-700 px-1 sm:px-1.5 py-0.5 rounded font-medium text-xs sm:text-base">
+                          congestive heart failure
+                        </span>{' '}
+                        and{' '}
+                        <span className="bg-medi-coral-100 text-medi-coral-700 px-1 sm:px-1.5 py-0.5 rounded font-medium text-xs sm:text-base">
+                          type 2 diabetes with neuropathy
+                        </span>.
+                      </p>
+                      <p>
+                        BMI 42.{' '}
+                        <span className="bg-medi-coral-100 text-medi-coral-700 px-1 sm:px-1.5 py-0.5 rounded font-medium text-xs sm:text-base">
+                          Morbid obesity
+                        </span>{' '}
+                        documented. Prior{' '}
+                        <span className="bg-medi-coral-100 text-medi-coral-700 px-1 sm:px-1.5 py-0.5 rounded font-medium text-xs sm:text-base">
+                          coronary artery disease
+                        </span>{' '}
+                        with stent 04/2022.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Process Button / Click Effect / Loading */}
+                  <div className="flex justify-center pt-24 sm:pt-16">
+                    {animationStep === 1 ? (
+                      <button className="btn-primary !py-3 !px-6 !text-sm animate-scale-in">
+                        <IconBolt />
+                        Analyze Note
+                      </button>
+                    ) : animationStep === 2 ? (
+                      <button className="btn-primary !py-3 !px-6 !text-sm scale-95 opacity-80 transition-all duration-200">
+                        <IconBolt />
+                        Analyze Note
+                      </button>
+                    ) : animationStep === 3 ? (
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 rounded-full animate-pulse" style={{
+                          background: 'linear-gradient(135deg, rgba(238, 204, 111, 1), rgba(218, 165, 32, 1))'
+                        }} />
+                        <div className="w-3 h-3 rounded-full animate-pulse animation-delay-200" style={{
+                          background: 'linear-gradient(135deg, rgba(222, 184, 135, 1), rgba(238, 204, 111, 1))'
+                        }} />
+                        <div className="w-3 h-3 rounded-full animate-pulse animation-delay-400" style={{
+                          background: 'linear-gradient(135deg, rgba(218, 165, 32, 1), rgba(222, 184, 135, 1))'
+                        }} />
+                        <span className="text-medi-gray-600 font-medium ml-2">Analyzing...</span>
                       </div>
-                    ))}
+                    ) : null}
                   </div>
                 </div>
-              )}
+
+                {/* === Slide 2: HCC/RAF Results === */}
+                <div style={{ height: '100%' }} className="flex flex-col pt-10 sm:pt-12">
+                  <div className="space-y-2 sm:space-y-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="px-2 py-1 text-yellow-600 bg-yellow-200 text-[10px] sm:text-xs font-mono rounded-full whitespace-nowrap">HCC GAP ANALYSIS</div>
+                      <div className="h-px flex-1 bg-medi-gray-200" />
+                    </div>
+
+                    <div className="grid gap-1.5 sm:gap-2">
+                      {hccResults.map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2 sm:p-3 bg-medi-gray-50 rounded-lg sm:rounded-xl group hover:bg-medi-green-50 transition-all duration-300 hover:shadow-md hover:shadow-medi-green-500/10"
+                        >
+                          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                            <span className="font-mono font-semibold text-medi-gray-900 text-xs sm:text-sm flex-shrink-0">{item.code}</span>
+                            <span className="text-xs sm:text-sm text-medi-gray-500 truncate">{item.desc}</span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-0.5 sm:mt-0 flex-shrink-0">
+                            <span className="font-mono text-xs sm:text-sm font-semibold text-medi-green-600">{item.raf}</span>
+                            <span className={`text-[10px] sm:text-xs font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded ${
+                              item.status === 'Missed' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                            }`}>
+                              {item.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* RAF Score Summary */}
+                    <div className="p-2.5 sm:p-4 rounded-lg sm:rounded-xl border-2 border-medi-green-500/30 bg-medi-green-50/50">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-[10px] sm:text-xs font-mono text-medi-gray-500 mb-0.5 sm:mb-1">TOTAL RAF SCORE</div>
+                          <div className="font-display font-bold text-base sm:text-2xl text-medi-gray-900">1.847</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-[10px] sm:text-xs font-mono text-medi-gray-500 mb-0.5 sm:mb-1">EST. REVENUE IMPACT</div>
+                          <div className="font-display font-bold text-base sm:text-2xl text-medi-green-600">+$4,215<span className="text-[10px] sm:text-sm font-normal text-medi-gray-500">/yr</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Play overlay */}
+              <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center rounded-3xl transition-all duration-500 ${
+                isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
+              }`} style={{ background: '#f3ede7' }}>
+                <p className="font-display font-semibold text-medi-gray-700 text-sm sm:text-base mb-4">Watch a note become revenue</p>
+                <button
+                  onClick={handlePlay}
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-xl shadow-medi-green-500/30 hover:shadow-2xl hover:shadow-medi-green-500/40 hover:scale-110 transition-all duration-300"
+                  style={{ background: 'linear-gradient(135deg, #36364a 0%, #151324 100%)' }}
+                >
+                  <svg className="w-7 h-7 sm:w-8 sm:h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// No Integration Banner
+function NoIntegrationBanner() {
+  const [ref, isVisible] = useScrollReveal()
+
+  return (
+    <section ref={ref} className="py-12 relative overflow-hidden">
+      <div className={`max-w-4xl mx-auto px-6 lg:px-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className="glass-card p-6 md:p-8 rounded-2xl border border-medi-green-500/20 text-center">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+            <div className="flex items-center gap-2 badge-green">
+              <IconBolt />
+              <span className="font-semibold">Zero Integration. Instant Results.</span>
+            </div>
+            <p className="text-medi-gray-600 text-sm md:text-base">
+              Other platforms need months of EHR setup. MediCoder works the moment you upload your first note.
+            </p>
           </div>
         </div>
       </div>
@@ -416,33 +465,34 @@ function ProblemSection() {
       <div className={`max-w-7xl mx-auto px-6 lg:px-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="section-heading mb-6">
-            Medical coding shouldn't be a{' '}
-            <span className="line-through text-yellow-500">bottleneck</span>
+            Your clinical notes have more{' '}
+            <span className="gradient-text">value</span>{' '}
+            than you think
           </h2>
           <p className="section-subheading mx-auto">
-            Your staff spends hours translating clinical documentation into billing codes. 
-            We believe that time is better spent on patient care.
+            Most practices leave 15-30% of legitimate RAF value on the table.
+            Every missed HCC is revenue you've already earned but never captured.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-8">
           {[
             {
-              icon: <IconClock />,
-              title: 'Hours Lost Daily',
-              desc: 'Manual coding takes 10-15 minutes per encounter. For a busy clinic, that adds up to hours every day.',
+              icon: <IconChart />,
+              title: 'Missed HCCs Cost You Money',
+              desc: 'Every unrecaptured HCC costs thousands per member per year. Most practices leave significant RAF value undocumented.',
               color: 'coral'
             },
             {
-              icon: <IconChart />,
-              title: 'Revenue at Risk',
-              desc: 'Coding errors lead to claim denials. Each rejected claim costs time and money to rework and resubmit.',
+              icon: <IconClock />,
+              title: 'Integration Shouldn\'t Be a Barrier',
+              desc: 'Other platforms need months of EHR setup and IT approval. Your revenue gaps can\'t wait that long.',
               color: 'blue'
             },
             {
               icon: <IconShield />,
-              title: 'Compliance Concerns',
-              desc: 'Staying current with coding updates and documentation requirements is a constant challenge.',
+              title: 'V28 Changed the Rules',
+              desc: 'The CMS-HCC V28 model shifted weights and dropped conditions. If your workflow hasn\'t adapted, you\'re losing revenue.',
               color: 'green'
             }
           ].map((item, i) => (
@@ -472,21 +522,21 @@ function HowItWorksSection() {
   const steps = [
     {
       step: '01',
-      title: 'Upload Clinical Note',
-      desc: 'Upload your clinical documentation. We support encounter notes, progress notes, and more.',
+      title: 'Upload Clinical Notes',
+      desc: 'Upload notes from any EHR, any format — PDFs, text, dictation exports. Single notes or batch uploads.',
       icon: <IconDocument />
     },
     {
       step: '02',
-      title: 'AI Analysis',
-      desc: 'Our specialized AI reads the note, identifies diagnoses, procedures, and relevant clinical concepts.',
+      title: 'AI-Powered Analysis',
+      desc: 'Our AI surfaces missed HCCs, calculates RAF scores under V28, and identifies documentation specificity gaps.',
       icon: <IconBolt />
     },
     {
       step: '03',
-      title: 'Review & Submit',
-      desc: 'Review suggested codes and apply any necessary adjustments seamlessly in your existing billing workflow.',
-      icon: <IconCode />
+      title: 'Revenue Impact Report',
+      desc: 'Get a clear report showing captured vs. missed HCCs, RAF score impact, and estimated revenue per member.',
+      icon: <IconChart />
     }
   ]
 
@@ -498,12 +548,12 @@ function HowItWorksSection() {
           <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
             <div className="badge-green mb-4 inline-flex">Simple & Powerful</div>
             <h2 className="section-heading mb-6">
-              Steps to{' '}
-              <span className="gradient-text">accurate codes</span>
+              From clinical notes to{' '}
+              <span className="gradient-text">revenue impact</span>
             </h2>
             <p className="section-subheading">
-              Our AI analyzes your clinical documentation and generates appropriate
-              billing codes in seconds—not hours.
+              Upload notes in any format. Get back HCC gaps, RAF scores,
+              and dollar impact — in seconds, not weeks.
             </p>
           </div>
 
@@ -552,48 +602,48 @@ function FeaturesSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
         <div className={`text-center mb-20 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
           <div className="badge-green mb-4 inline-flex">
-            Built for Healthcare
+            Built for Value-Based Care
           </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mb-6 text-medi-gray-900">
             Everything you need,{' '}
             <span className="gradient-text">nothing you don't</span>
           </h2>
           <p className="text-xl text-medi-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Focused features designed specifically for primary care outpatient coding workflows.
+            Risk adjustment intelligence and FFS coding under one roof — purpose-built for primary care.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
-              title: 'Primary Care Focused',
-              desc: 'Purpose-built for family medicine, internal medicine, pediatrics, geriatrics, and telehealth specialties.',
-              icon: '🩺'
-            },
-            {
-              title: 'ICD-10-CM, CPT & HCPCS',
-              desc: 'Generates both diagnosis and procedure codes from a single clinical note.',
-              icon: '📋'
-            },
-            {
-              title: 'HIPAA Compliant',
-              desc: 'Enterprise-grade security with full HIPAA compliance and BAA available.',
-              icon: '🔒'
-            },
-            {
-              title: '95%+ Accuracy',
-              desc: 'High accuracy rates validated against certified coder benchmarks.',
+              title: 'HCC Capture & RAF Scoring',
+              desc: 'Surface missed HCCs and calculate RAF scores under the V28 model. See the dollar impact per member, per encounter.',
               icon: '🎯'
             },
             {
-              title: 'Instant Results',
-              desc: 'Get code suggestions in seconds, not minutes. Batch processing available.',
+              title: 'Batch Processing',
+              desc: 'Upload hundreds of notes at once. Process an entire panel in minutes, not days.',
               icon: '⚡'
             },
             {
-              title: 'Smart De-ID',
-              desc: 'Intelligent redaction of sensitive PII data. Protect patient privacy automatically.',
-              icon: '🛡️'
+              title: 'Documentation Specificity Analysis',
+              desc: 'Identify where documentation lacks the specificity needed to support higher-value HCCs.',
+              icon: '📋'
+            },
+            {
+              title: 'Recapture Tracking',
+              desc: 'Track which HCCs from prior years need recapture and flag gaps before they cost you revenue.',
+              icon: '🔄'
+            },
+            {
+              title: 'FFS Code Generation',
+              desc: 'Also generates ICD-10-CM, CPT, and HCPCS codes for fee-for-service billing workflows.',
+              icon: '🩺'
+            },
+            {
+              title: 'Smart De-ID & HIPAA Compliance',
+              desc: 'Intelligent PII redaction and enterprise-grade security. HIPAA compliant with BAA available.',
+              icon: '🔒'
             }
           ].map((item, i) => (
             <div
@@ -617,33 +667,36 @@ function PricingSection() {
   const [ref, isVisible] = useScrollReveal()
   const tiers = [
     {
-      name: 'Free Trial',
-      description: 'Experience AI medical coding with no commitment.',
+      name: 'Free Audit',
+      description: 'See what you\'re missing — no commitment.',
       perks: [
-        '14-day full access trial',
-        'Email support',
-        'No credit card required',
-        'Single user access'
+        '25-chart audit',
+        'Full HCC gap analysis',
+        'RAF score report',
+        'No credit card required'
       ],
       highlighted: false,
       badge: null
     },
     {
-      name: 'Basic',
-      description: 'For solo cilinicians needing precision and trusted tool.',
+      name: 'Starter',
+      description: 'For solo practitioners and small practices.',
       perks: [
-        'Unlimited code generation',
-        'Standard support',
-        'Single user access'
+        'Up to 200 charts/month',
+        'HCC capture + RAF scoring',
+        'FFS code generation',
+        'Email support'
       ],
       highlighted: false,
       badge: null
     },
     {
-      name: 'Team',
-      description: 'Ideal for teams that need collaborative coding workflows.',
+      name: 'Professional',
+      description: 'For growing practices and billing companies.',
       perks: [
-        'All perks from previous tier',
+        'All Starter features',
+        'Unlimited charts',
+        'Batch processing',
         'Priority support',
         'Multi-user access (up to 5)'
       ],
@@ -651,12 +704,14 @@ function PricingSection() {
       badge: 'Most Popular'
     },
     {
-      name: 'Business',
-      description: 'Enterprise-grade solution for high-volume clinics and organizations.',
+      name: 'Enterprise',
+      description: 'For MSOs, IPAs, and large organizations.',
       perks: [
-        'All perks from previous tier',
-        'Priority support',
-        'Multi-user access (up to 10)'
+        'All Professional features',
+        'Dedicated account manager',
+        'Custom integrations',
+        'Unlimited users',
+        'Volume pricing'
       ],
       highlighted: false,
       badge: null
@@ -669,12 +724,12 @@ function PricingSection() {
         <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
           <div className="badge-green mb-4 inline-flex">Flexible Plans</div>
           <h2 className="section-heading mb-6">
-            Choose the plan that{' '}
-            <span className="gradient-text">fits your practice</span>
+            Start with a free{' '}
+            <span className="gradient-text">25-chart audit</span>
           </h2>
           <p className="section-subheading mx-auto">
-            From solo practitioners to large clinics,<br />
-            we have a plan designed for your needs.
+            From solo practitioners to large organizations,<br />
+            find the plan that fits your practice.
           </p>
         </div>
 
@@ -765,7 +820,7 @@ function CTASection() {
       </div>
 
       <p className="text-lg text-medi-gray-600 mb-6">
-        Ready to learn more? Get in touch with our team.
+        Ready to see what your notes are worth?
       </p>
       <button onClick={handleCopyEmail} className="btn-primary">
         contact@medicoder.ai
@@ -782,7 +837,7 @@ function TestimonialsSection() {
 
   const testimonials = [
     {
-      quote: "MediCoder.AI is an all-in-one product for healthcare professionals interested in primary care computer assisted coding.",
+      quote: "MediCoder.AI surfaced HCC gaps we didn't even know we were missing. The RAF impact reporting paid for itself in the first month.",
       name: "Arnold Almirez",
       role: "Outpatient Coding Manager",
       image: null // Can add image URL later
@@ -865,10 +920,10 @@ function Footer() {
               </span>
             </div>
             <p className="text-[#2b180a]/70 font-medium text-lg leading-relaxed max-w-md">
-              Built for primary care. Designed for simplicity.
+              Risk adjustment intelligence. No integration required.
             </p>
             <p className="text-[#2b180a]/60 text-sm leading-relaxed max-w-md">
-              Transform your clinical notes into accurate medical codes with AI-powered automation.
+              Surface missed HCCs, calculate RAF scores, and close revenue gaps — from any clinical note, any format, any EHR.
             </p>
           </div>
 
@@ -947,6 +1002,7 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-b from-white via-medi-gray-50/30 via-50% via-white via-75% to-medi-gray-50/20" />
         </div>
         <HeroSection />
+        <NoIntegrationBanner />
         <ProblemSection />
         <HowItWorksSection />
         <FeaturesSection />
