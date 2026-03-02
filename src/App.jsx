@@ -613,66 +613,128 @@ function HowItWorksSection() {
 // Features Section
 function FeaturesSection() {
   const [ref, isVisible] = useScrollReveal()
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const features = [
+    {
+      title: 'HCC Capture & RAF Scoring',
+      desc: 'Surface missed HCCs and calculate RAF scores under the V28 model. See the dollar impact per member, per encounter.',
+      icon: '🎯'
+    },
+    {
+      title: 'Batch Processing',
+      desc: 'Upload hundreds of notes at once. Process an entire panel in minutes, not days.',
+      icon: '⚡'
+    },
+    {
+      title: 'Documentation Specificity Analysis',
+      desc: 'Identify where documentation lacks the specificity needed to support higher-value HCCs.',
+      icon: '📋'
+    },
+    {
+      title: 'Recapture Tracking',
+      desc: 'Track which HCCs from prior years need recapture and flag gaps before they cost you revenue.',
+      icon: '🔄'
+    },
+    {
+      title: 'FFS Code Generation',
+      desc: 'Also generates ICD-10-CM, CPT, and HCPCS codes for fee-for-service billing workflows.',
+      icon: '🩺'
+    },
+    {
+      title: 'Smart De-ID & HIPAA Compliance',
+      desc: 'Intelligent PII redaction and enterprise-grade security. HIPAA compliant with BAA available.',
+      icon: '🔒'
+    }
+  ]
+
+  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % features.length)
+  const prevSlide = () => setActiveIndex((prev) => (prev - 1 + features.length) % features.length)
 
   return (
     <section ref={ref} id="features" className="py-24 lg:py-32 relative overflow-hidden bg-gradient-to-b from-white via-medi-gray-50/30 to-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-        <div className={`text-center mb-20 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-          <div className="badge-green mb-4 inline-flex">
-            Built for Value-Based Care
-          </div>
-          <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mb-6 text-medi-gray-900">
-            Everything you need,{' '}
-            <span className="gradient-text">nothing you don't</span>
-          </h2>
-          <p className="text-xl text-medi-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Risk adjustment intelligence and FFS coding under one roof — purpose-built for primary care.
-          </p>
-        </div>
+        <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            {
-              title: 'HCC Capture & RAF Scoring',
-              desc: 'Surface missed HCCs and calculate RAF scores under the V28 model. See the dollar impact per member, per encounter.',
-              icon: '🎯'
-            },
-            {
-              title: 'Batch Processing',
-              desc: 'Upload hundreds of notes at once. Process an entire panel in minutes, not days.',
-              icon: '⚡'
-            },
-            {
-              title: 'Documentation Specificity Analysis',
-              desc: 'Identify where documentation lacks the specificity needed to support higher-value HCCs.',
-              icon: '📋'
-            },
-            {
-              title: 'Recapture Tracking',
-              desc: 'Track which HCCs from prior years need recapture and flag gaps before they cost you revenue.',
-              icon: '🔄'
-            },
-            {
-              title: 'FFS Code Generation',
-              desc: 'Also generates ICD-10-CM, CPT, and HCPCS codes for fee-for-service billing workflows.',
-              icon: '🩺'
-            },
-            {
-              title: 'Smart De-ID & HIPAA Compliance',
-              desc: 'Intelligent PII redaction and enterprise-grade security. HIPAA compliant with BAA available.',
-              icon: '🔒'
-            }
-          ].map((item, i) => (
-            <div
-              key={i}
-              className={`glass-card p-8 rounded-2xl border border-medi-gray-200/50 hover:border-medi-green-500/30 transition-all duration-500 group hover:shadow-xl hover:shadow-medi-green-500/5 hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              style={{transitionDelay: `${i * 100}ms`}}
-            >
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
-              <h3 className="font-display font-bold text-xl mb-3 text-medi-gray-900 group-hover:text-medi-green-500 transition-colors">{item.title}</h3>
-              <p className="text-medi-gray-600 text-sm leading-relaxed">{item.desc}</p>
+          {/* Left - Capsule Slider */}
+          <div className="relative order-2 lg:order-1" style={{ perspective: '1200px' }}>
+            <div className="relative h-[300px] sm:h-[320px]">
+              {features.map((item, i) => {
+                const offset = (i - activeIndex + features.length) % features.length
+                const isFar = offset > 3
+
+                return (
+                  <div
+                    key={i}
+                    className="absolute inset-0 p-6 sm:p-8 transition-all duration-500 ease-out"
+                    style={{
+                      transform: `translateX(${offset * 14}px) translateY(${offset * 14}px)`,
+                      zIndex: features.length - offset,
+                      opacity: isFar ? 0 : 1 - offset * 0.2,
+                      borderRadius: '2rem',
+                      background: offset === 0 ? 'rgba(255,255,255,0.95)' : `rgba(255,255,255,${0.85 - offset * 0.1})`,
+                      border: offset === 0 ? '1px solid rgba(21, 19, 36, 0.12)' : '1px solid rgba(229, 231, 235, 0.6)',
+                      boxShadow: offset === 0
+                        ? '0 25px 50px -12px rgba(21, 19, 36, 0.18), 0 0 0 1px rgba(21, 19, 36, 0.04)'
+                        : `0 ${4 + offset * 2}px ${12 + offset * 4}px -${4 + offset}px rgba(0,0,0,${0.04 + offset * 0.01})`,
+                      pointerEvents: offset === 0 ? 'auto' : 'none',
+                      backdropFilter: 'blur(12px)',
+                      WebkitBackdropFilter: 'blur(12px)',
+                    }}
+                  >
+                    <div className="text-4xl sm:text-5xl mb-4">{item.icon}</div>
+                    <h3 className="font-display font-bold text-xl sm:text-2xl mb-3 text-medi-gray-900">{item.title}</h3>
+                    <p className="text-medi-gray-600 text-sm sm:text-base leading-relaxed">{item.desc}</p>
+                  </div>
+                )
+              })}
             </div>
-          ))}
+
+            {/* Navigation */}
+            <div className="flex items-center gap-4 mt-10">
+              <button
+                onClick={prevSlide}
+                className="w-10 h-10 rounded-full border border-medi-gray-200 flex items-center justify-center text-medi-gray-500 hover:border-medi-gray-900 hover:text-medi-gray-900 transition-all duration-200"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <div className="flex gap-2">
+                {features.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveIndex(i)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      i === activeIndex ? 'w-6 bg-medi-gray-900' : 'w-2 bg-medi-gray-300 hover:bg-medi-gray-400'
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={nextSlide}
+                className="w-10 h-10 rounded-full border border-medi-gray-200 flex items-center justify-center text-medi-gray-500 hover:border-medi-gray-900 hover:text-medi-gray-900 transition-all duration-200"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Right - Title & Description */}
+          <div className="order-1 lg:order-2">
+            <div className="badge-green mb-4 inline-flex">
+              Built for Value-Based Care
+            </div>
+            <h2 className="font-display font-bold text-3xl md:text-4xl mb-6 text-medi-gray-900">
+              Everything you need,<br />
+              <span className="gradient-text">nothing you don't</span>
+            </h2>
+            <p className="text-lg sm:text-xl text-medi-gray-600 leading-relaxed">
+              Risk adjustment intelligence and FFS coding under one roof — purpose-built for primary care.
+            </p>
+          </div>
         </div>
       </div>
     </section>
