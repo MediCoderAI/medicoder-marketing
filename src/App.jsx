@@ -595,8 +595,8 @@ function HowItWorksSection() {
 
                 {/* Arrow between steps */}
                 {i < steps.length - 1 && (
-                  <div className={`flex justify-center py-4 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`} style={{transitionDelay: `${i * 150 + 75}ms`}}>
-                    <svg className="w-8 h-8 text-medi-green-500 animate-float" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <div className={`flex justify-center py-8 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`} style={{transitionDelay: `${i * 150 + 75}ms`}}>
+                    <svg className="w-8 h-8 text-medi-green-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>
                   </div>
@@ -614,6 +614,8 @@ function HowItWorksSection() {
 function FeaturesSection() {
   const [ref, isVisible] = useScrollReveal()
   const [activeIndex, setActiveIndex] = useState(0)
+  const [dragX, setDragX] = useState(0)
+  const touchRef = useRef({ startX: 0, startY: 0, isDragging: false })
 
   const features = [
     {
@@ -651,6 +653,41 @@ function FeaturesSection() {
   const nextSlide = () => setActiveIndex((prev) => (prev + 1) % features.length)
   const prevSlide = () => setActiveIndex((prev) => (prev - 1 + features.length) % features.length)
 
+  const handleDragStart = (clientX, clientY) => {
+    touchRef.current = { startX: clientX, startY: clientY, isDragging: true }
+  }
+
+  const handleDragMove = (clientX, clientY) => {
+    if (!touchRef.current.isDragging) return
+    const deltaX = clientX - touchRef.current.startX
+    const deltaY = clientY - touchRef.current.startY
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      setDragX(deltaX)
+    }
+  }
+
+  const handleDragEnd = () => {
+    if (!touchRef.current.isDragging) return
+    touchRef.current.isDragging = false
+    if (dragX < -50) {
+      nextSlide()
+    } else if (dragX > 50) {
+      prevSlide()
+    }
+    setDragX(0)
+  }
+
+  // Touch events
+  const handleTouchStart = (e) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY)
+  const handleTouchMove = (e) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY)
+  const handleTouchEnd = handleDragEnd
+
+  // Mouse events
+  const handleMouseDown = (e) => { e.preventDefault(); handleDragStart(e.clientX, e.clientY) }
+  const handleMouseMove = (e) => handleDragMove(e.clientX, e.clientY)
+  const handleMouseUp = handleDragEnd
+  const handleMouseLeave = () => { if (touchRef.current.isDragging) handleDragEnd() }
+
   return (
     <section ref={ref} id="features" className="py-24 lg:py-32 relative overflow-hidden bg-gradient-to-b from-white via-medi-gray-50/30 to-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
@@ -658,17 +695,27 @@ function FeaturesSection() {
 
           {/* Left - Capsule Slider */}
           <div className="relative order-2 lg:order-1" style={{ perspective: '1200px' }}>
-            <div className="relative h-[300px] sm:h-[320px]">
+            <div
+              className="relative h-[300px] sm:h-[320px] touch-pan-y select-none cursor-grab active:cursor-grabbing"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseLeave}
+            >
               {features.map((item, i) => {
                 const offset = (i - activeIndex + features.length) % features.length
                 const isFar = offset > 3
+                const swipeX = offset === 0 ? dragX : 0
 
                 return (
                   <div
                     key={i}
-                    className="absolute inset-0 p-6 sm:p-8 transition-all duration-500 ease-out"
+                    className={`absolute inset-0 p-6 sm:p-8 ${dragX !== 0 ? 'transition-none' : 'transition-all duration-500 ease-out'}`}
                     style={{
-                      transform: `translateX(${offset * 14}px) translateY(${offset * 14}px)`,
+                      transform: `translateX(${offset * 14 + swipeX}px) translateY(${offset * 14}px)`,
                       zIndex: features.length - offset,
                       opacity: isFar ? 0 : 1 - offset * 0.2,
                       borderRadius: '2rem',
@@ -728,8 +775,8 @@ function FeaturesSection() {
               Built for Value-Based Care
             </div>
             <h2 className="font-display font-bold text-3xl md:text-4xl mb-6 text-medi-gray-900">
-              Everything you need,<br />
-              <span className="gradient-text">nothing you don't</span>
+              From clinical notes<br />
+              to captured <span className="gradient-text">revenue</span>
             </h2>
             <p className="text-lg sm:text-xl text-medi-gray-600 leading-relaxed">
               Risk adjustment intelligence and FFS coding under one roof — purpose-built for primary care.
