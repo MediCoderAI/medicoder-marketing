@@ -1,0 +1,342 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+
+const tiers = [
+  {
+    name: "Free Audit",
+    description: "See what you're missing — no commitment.",
+    perks: ["25-chart audit", "Full HCC gap analysis", "RAF score report", "No credit card required"],
+    highlighted: false,
+    badge: null,
+  },
+  {
+    name: "Starter",
+    description: "For solo practitioners and small practices.",
+    perks: ["Up to 200 charts/month", "HCC capture + RAF scoring", "FFS code generation", "Email support"],
+    highlighted: false,
+    badge: null,
+  },
+  {
+    name: "Professional",
+    description: "For growing practices and billing companies.",
+    perks: ["All Starter features", "Unlimited charts", "Batch processing", "Priority support", "Multi-user access (up to 5)"],
+    highlighted: true,
+    badge: "Most Popular",
+  },
+  {
+    name: "Enterprise",
+    description: "For MSOs, IPAs, and large organizations.",
+    perks: ["All Professional features", "Dedicated account manager", "Custom integrations", "Unlimited users", "Volume pricing"],
+    highlighted: false,
+    badge: null,
+  },
+];
+---
+
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <Reveal client:visible delay={0} distance={60} rotate={-10}>
+      <div class="pricing-header">
+        <h2 class="section-heading">
+          Start with a free <em>25-chart audit</em>
+        </h2>
+        <p class="section-copy pricing-sub">
+          From solo practitioners to large organizations, find the plan that fits
+          your practice.
+        </p>
+      </div>
+    </Reveal>
+
+    <div class="pricing-grid">
+      {
+        tiers.map((tier, i) => (
+          <Reveal client:visible delay={i * 100} distance={80} rotate={-14}>
+            <div
+              class:list={[
+                "pricing-card",
+                { highlighted: tier.highlighted, "has-badge": tier.badge },
+              ]}
+            >
+              {tier.badge && <span class="tier-badge">{tier.badge}</span>}
+
+              <div class="tier-header">
+                <h3>{tier.name}</h3>
+                <p>{tier.description}</p>
+              </div>
+
+              <div class="tier-divider"></div>
+
+              <ul class="perk-list">
+                {tier.perks.map((perk) => (
+                  <li>
+                    <span class="check-dot">
+                      <svg
+                        width="12"
+                        height="12"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="3"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span>{perk}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                href="https://calendly.com/samuel-han-medicoder/book-a-consultation"
+                target="_blank"
+                rel="noopener noreferrer"
+                class:list={[
+                  tier.highlighted ? "cta-highlighted" : "cta-normal",
+                  "tier-cta",
+                ]}
+              >
+                Get Started
+                <span class="cta-arrow">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </a>
+            </div>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .pricing-section {
+    padding: 100px 0 120px;
+  }
+
+  .pricing-header {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .pricing-sub {
+    text-align: center;
+  }
+
+  .pricing-grid {
+    display: grid;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  /* ── Card base ── */
+  .pricing-card {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px;
+    border-radius: var(--radius-md);
+    background: white;
+    border: 1px solid var(--line-subtle);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    transition: all var(--duration-base) var(--ease-standard);
+    height: 100%;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* ── Highlighted (Professional) ── */
+  .pricing-card.highlighted {
+    background: var(--bg-dark);
+    border-color: transparent;
+    color: var(--ink-on-dark);
+    box-shadow: 0 20px 60px rgba(26, 49, 42, 0.25);
+  }
+
+  .pricing-card.highlighted:hover {
+    box-shadow: 0 28px 70px rgba(26, 49, 42, 0.35);
+  }
+
+  .pricing-card.has-badge {
+    padding-top: 50px;
+  }
+
+  .tier-badge {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-lime);
+    color: #3d5a0a;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  /* ── Tier header ── */
+  .tier-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .tier-header h3 {
+    margin: 0 0 8px;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: inherit;
+  }
+
+  .tier-header p {
+    margin: 0;
+    opacity: 0.65;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── Divider ── */
+  .tier-divider {
+    height: 1px;
+    background: var(--line-subtle);
+    margin-bottom: 20px;
+  }
+
+  .highlighted .tier-divider {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* ── Perk list ── */
+  .perk-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .perk-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .check-dot {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    background: rgba(209, 234, 103, 0.18);
+    color: #3d5a0a;
+  }
+
+  .highlighted .check-dot {
+    background: rgba(209, 234, 103, 0.2);
+    color: var(--accent-lime);
+  }
+
+  .perk-list li > span:last-child {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── CTA buttons ── */
+  .tier-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 28px;
+    width: 100%;
+    padding: 8px 8px 8px 22px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-standard);
+  }
+
+  .tier-cta:hover {
+    transform: translateY(-2px);
+  }
+
+  .cta-arrow {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .tier-cta:hover .cta-arrow {
+    transform: translateX(3px);
+  }
+
+  .cta-normal {
+    border: 1px solid var(--line-subtle);
+    background: var(--accent-green);
+    color: var(--ink-on-dark);
+  }
+
+  .cta-normal:hover {
+    box-shadow: 0 10px 24px rgba(26, 49, 42, 0.25);
+  }
+
+  .cta-normal .cta-arrow {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--ink-on-dark);
+  }
+
+  .cta-highlighted {
+    border: 1px solid var(--accent-lime);
+    background: var(--accent-lime);
+    color: #1a312a;
+  }
+
+  .cta-highlighted:hover {
+    box-shadow: 0 10px 24px rgba(209, 234, 103, 0.35);
+  }
+
+  .cta-highlighted .cta-arrow {
+    background: rgba(26, 49, 42, 0.15);
+    color: #1a312a;
+  }
+
+  @media (min-width: 768px) {
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .pricing-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

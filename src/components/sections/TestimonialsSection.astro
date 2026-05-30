@@ -1,0 +1,175 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+
+const testimonials = [
+  {
+    quote: "MediCoder.AI surfaced HCC gaps we didn't even know we were missing. The RAF impact reporting paid for itself in the first month.",
+    name: "Arnold Almirez",
+    role: "Outpatient Coding Manager",
+    initials: "AA",
+  },
+];
+---
+
+<section class="testimonials-section">
+  <div class="container">
+    <Reveal client:visible delay={0} distance={60} rotate={-10}>
+      <div class="testimonials-header">
+        <h2 class="section-heading">
+          Trusted by <em>healthcare professionals</em>
+        </h2>
+        <p class="section-copy testimonials-sub">
+          See what coding professionals are saying about MediCoder.AI
+        </p>
+      </div>
+    </Reveal>
+
+    <div class:list={["testimonials-grid", { single: testimonials.length === 1 }]}>
+      {
+        testimonials.map((t, i) => (
+          <Reveal client:visible delay={i * 100} distance={60} rotate={-10}>
+            <div class="testimonial-card">
+              <div class="testimonial-author">
+                <div class="avatar">{t.initials}</div>
+                <div>
+                  <div class="author-name">{t.name}</div>
+                  <div class="author-role">{t.role}</div>
+                </div>
+              </div>
+              <blockquote>
+                <span class="qmark open">&ldquo;</span>
+                <p>{t.quote}</p>
+                <span class="qmark close">&rdquo;</span>
+              </blockquote>
+            </div>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials-section {
+    padding: 100px 0 120px;
+  }
+
+  .testimonials-header {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .testimonials-sub {
+    text-align: center;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .testimonials-grid.single {
+    max-width: 580px;
+    margin-inline: auto;
+  }
+
+  .testimonial-card {
+    display: flex;
+    flex-direction: column;
+    padding: 36px 32px;
+    border-radius: var(--radius-md);
+    background: var(--bg-dark);
+    color: var(--ink-on-dark);
+    box-shadow: 0 20px 60px rgba(26, 49, 42, 0.2);
+    transition: all var(--duration-base) var(--ease-standard);
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 70px rgba(26, 49, 42, 0.3);
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(209, 234, 103, 0.2);
+    color: var(--accent-lime);
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .author-name {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--ink-on-dark);
+  }
+
+  .author-role {
+    font-size: 13px;
+    color: rgba(248, 246, 232, 0.55);
+    margin-top: 3px;
+  }
+
+  blockquote {
+    margin: 0;
+    position: relative;
+    padding-top: 16px;
+  }
+
+  .qmark {
+    font-size: 56px;
+    font-family: serif;
+    line-height: 1;
+    color: rgba(209, 234, 103, 0.15);
+  }
+
+  .qmark.open {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+  }
+
+  .qmark.close {
+    display: block;
+    text-align: right;
+    margin-top: 8px;
+  }
+
+  blockquote p {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    color: rgba(248, 246, 232, 0.85);
+    font-size: 17px;
+    line-height: 1.65;
+    font-style: italic;
+    font-family: var(--font-heading);
+    font-weight: 400;
+  }
+
+  @media (min-width: 768px) {
+    .testimonials-grid:not(.single) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

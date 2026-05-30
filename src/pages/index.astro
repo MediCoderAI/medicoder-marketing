@@ -1,0 +1,26 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import IntroScreen from "../components/motion/IntroScreen.svelte";
+import Header from "../components/site/Header.astro";
+import Hero from "../components/sections/Hero.astro";
+import ProblemSection from "../components/sections/ProblemSection.astro";
+import FeaturesSection from "../components/sections/FeaturesSection.astro";
+import PricingSection from "../components/sections/PricingSection.astro";
+import CTASection from "../components/sections/CTASection.astro";
+import TestimonialsSection from "../components/sections/TestimonialsSection.astro";
+import Footer from "../components/sections/Footer.astro";
+---
+
+<MarketingLayout>
+  <IntroScreen client:load />
+  <Header />
+  <main>
+    <Hero />
+    <ProblemSection />
+    <FeaturesSection />
+    <PricingSection />
+    <CTASection />
+    <TestimonialsSection />
+  </main>
+  <Footer />
+</MarketingLayout>

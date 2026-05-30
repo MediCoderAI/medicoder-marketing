@@ -1,0 +1,55 @@
+:root {
+  color-scheme: light;
+
+  /* ── Palette (from Serenya) ── */
+  --bg-page: #f8f6e8;
+  --bg-dark: #1a312a;
+  --bg-dark-alt: #254a3f;
+
+  --ink-strong: #312b24;
+  --ink-base: rgba(36, 32, 28, 0.75);
+  --ink-muted: #4f4f4f;
+  --ink-on-dark: #f8f6e8;
+  --ink-white: #fff;
+
+  --accent-lime: #d1ea67;
+  --accent-green: #1a312a;
+
+  --line-subtle: rgba(49, 43, 36, 0.14);
+  --line-strong: rgba(49, 43, 36, 0.24);
+
+  --glass-light: rgba(255, 255, 255, 0.2);
+  --glass-nav: rgba(248, 246, 232, 0.7);
+  --glass-card: rgba(255, 255, 255, 0.2);
+  --glass-white: rgba(255, 255, 255, 0.9);
+
+  /* ── Typography ── */
+  --font-heading: "Lora", Georgia, serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-logo: "Manrope", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* ── Layout ── */
+  --container-max: 1220px;
+  --container-pad: 25px;
+
+  /* ── Radius ── */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 100px;
+
+  /* ── Shadows ── */
+  --shadow-card: 0px 0.6px 1.6px -1.5px rgba(0, 0, 0, 0.17),
+    0px 2.3px 6px -3px rgba(0, 0, 0, 0.14),
+    0px 10px 26px -4.5px rgba(0, 0, 0, 0.02);
+  --shadow-soft: 0 12px 40px rgba(49, 43, 36, 0.08);
+
+  /* ── Motion ── */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --duration-fast: 220ms;
+  --duration-base: 420ms;
+  --duration-slow: 760ms;
+}
