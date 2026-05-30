@@ -1,0 +1,212 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+
+const problems = [
+  {
+    title: "Missed HCCs Cost You Money",
+    desc: "Every unrecaptured HCC costs thousands per member per year. Most practices leave significant RAF value undocumented.",
+    color: "lime",
+  },
+  {
+    title: "Integration Shouldn't Be a Barrier",
+    desc: "Other platforms need months of EHR setup and IT approval. Your revenue gaps can't wait that long.",
+    color: "green",
+  },
+  {
+    title: "V28 Changed the Rules",
+    desc: "The CMS-HCC V28 model shifted weights and dropped conditions. If your workflow hasn't adapted, you're losing revenue.",
+    color: "blue",
+  },
+];
+---
+
+<section class="problem-section" id="problems">
+  <div class="container">
+    <Reveal client:visible delay={0} distance={60} rotate={-10}>
+      <div class="problem-header">
+        <h2 class="problem-heading">
+          Your clinical notes have more <em>value</em> than you think
+        </h2>
+        <p class="problem-sub">
+          Most practices leave 15–30% of legitimate RAF value on the table.
+          Every missed HCC is revenue you've already earned but never captured.
+        </p>
+      </div>
+    </Reveal>
+
+    <div class="problem-grid">
+      {
+        problems.map((item, i) => (
+          <Reveal client:visible delay={i * 120} distance={80} rotate={-14}>
+            <div class={`problem-card card-${item.color}`}>
+              <div class="card-top">
+                <div class={`problem-icon icon-${item.color}`}>
+                  {item.color === "lime" && (
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  )}
+                  {item.color === "green" && (
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  )}
+                  {item.color === "blue" && (
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  )}
+                </div>
+                <span class="card-number">0{i + 1}</span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </div>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .problem-section {
+    padding: 120px 0 140px;
+  }
+
+  .problem-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 72px;
+  }
+
+  .problem-heading {
+    margin: 0 0 20px;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: clamp(34px, 2.8vw + 16px, 54px);
+    color: var(--ink-strong);
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+  }
+
+  .problem-heading em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .problem-sub {
+    margin: 0 auto;
+    max-width: 700px;
+    color: var(--ink-muted);
+    font-size: 17px;
+    line-height: 1.65;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  .problem-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .problem-card {
+    padding: 36px 32px 32px;
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-base) var(--ease-standard);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+  }
+
+  .problem-card:hover {
+    transform: translateY(-6px);
+  }
+
+  .card-lime {
+    background: linear-gradient(160deg, rgba(209, 234, 103, 0.12) 0%, rgba(209, 234, 103, 0.04) 100%);
+    border: 1px solid rgba(209, 234, 103, 0.25);
+  }
+  .card-lime:hover {
+    box-shadow: 0 20px 48px rgba(209, 234, 103, 0.15), 0 0 0 1px rgba(209, 234, 103, 0.3);
+  }
+
+  .card-green {
+    background: linear-gradient(160deg, rgba(26, 49, 42, 0.08) 0%, rgba(26, 49, 42, 0.02) 100%);
+    border: 1px solid rgba(26, 49, 42, 0.12);
+  }
+  .card-green:hover {
+    box-shadow: 0 20px 48px rgba(26, 49, 42, 0.1), 0 0 0 1px rgba(26, 49, 42, 0.18);
+  }
+
+  .card-blue {
+    background: linear-gradient(160deg, rgba(99, 163, 255, 0.08) 0%, rgba(99, 163, 255, 0.02) 100%);
+    border: 1px solid rgba(99, 163, 255, 0.15);
+  }
+  .card-blue:hover {
+    box-shadow: 0 20px 48px rgba(99, 163, 255, 0.1), 0 0 0 1px rgba(99, 163, 255, 0.22);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-number {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    opacity: 0.5;
+  }
+
+  .problem-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-lime {
+    background: rgba(209, 234, 103, 0.25);
+    color: #3d5a0a;
+  }
+
+  .icon-green {
+    background: rgba(26, 49, 42, 0.12);
+    color: var(--accent-green);
+  }
+
+  .icon-blue {
+    background: rgba(99, 163, 255, 0.15);
+    color: #1d4ed8;
+  }
+
+  .problem-card h3 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ink-strong);
+    white-space: nowrap;
+  }
+
+  .problem-card p {
+    margin: 0;
+    color: var(--ink-base);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  @media (min-width: 768px) {
+    .problem-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

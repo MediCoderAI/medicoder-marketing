@@ -1,0 +1,55 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+import FeatureCarousel from "../motion/FeatureCarousel.svelte";
+---
+
+<section class="features-section" id="features">
+  <div class="container">
+    <Reveal client:visible delay={0} distance={80} rotate={-14}>
+      <div class="features-grid">
+        <div class="features-carousel-col">
+          <FeatureCarousel client:visible />
+        </div>
+
+        <div class="features-text-col">
+          <h2 class="section-heading">
+            From clinical notes to captured <em>revenue</em>
+          </h2>
+          <p class="section-copy">
+            Risk adjustment intelligence and FFS coding under one roof —
+            purpose-built for primary care.
+          </p>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  .features-section {
+    padding: 100px 0 120px;
+  }
+
+  .features-grid {
+    display: grid;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .features-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    order: -1;
+  }
+
+  @media (min-width: 1024px) {
+    .features-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+
+    .features-carousel-col { order: -1; }
+    .features-text-col { order: 0; }
+  }
+</style>

@@ -1,0 +1,193 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+---
+
+<Reveal client:visible delay={0} distance={80} rotate={-14}>
+  <section class="cta-section">
+    <div class="cta-inner">
+      <div class="cta-content">
+        <h2 class="cta-heading">
+          Ready to see what your notes are <em>worth?</em>
+        </h2>
+        <p class="cta-desc">
+          Upload your first notes free. No EHR integration, no commitment — just
+          the revenue you've been leaving on the table.
+        </p>
+        <div class="cta-actions">
+          <button class="btn-cta" id="copy-email-btn">
+            contact@medicoder.ai
+            <span class="arrow-circle">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </span>
+          </button>
+          <a
+            href="https://calendly.com/samuel-han-medicoder/book-a-consultation"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-cta-secondary"
+          >
+            Book a consultation
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="copied-toast" id="copied-toast">Copied!</div>
+  </section>
+</Reveal>
+
+<script>
+  const btn = document.getElementById("copy-email-btn");
+  const toast = document.getElementById("copied-toast");
+
+  btn?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText("contact@medicoder.ai");
+      toast?.classList.add("visible");
+      setTimeout(() => toast?.classList.remove("visible"), 2000);
+    } catch {
+      window.location.href = "mailto:contact@medicoder.ai";
+    }
+  });
+</script>
+
+<style>
+  .cta-section {
+    position: relative;
+    margin: 0 var(--container-pad);
+    padding: 100px 30px 120px;
+    border-radius: var(--radius-lg);
+    background: var(--bg-dark);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .cta-heading {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: clamp(28px, 2.5vw + 12px, 42px);
+    color: var(--ink-on-dark);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+
+  .cta-heading em {
+    font-style: italic;
+  }
+
+  .cta-desc {
+    margin: 0;
+    color: rgba(248, 246, 232, 0.7);
+    max-width: 440px;
+    line-height: 1.5;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding-top: 12px;
+  }
+
+  .btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 8px 8px 24px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    color: var(--ink-on-dark);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-standard);
+  }
+
+  .btn-cta:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+  }
+
+  .btn-cta .arrow-circle {
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-on-dark);
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .btn-cta:hover .arrow-circle {
+    transform: translateX(4px);
+  }
+
+  .btn-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 24px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: var(--ink-on-dark);
+    font-size: 15px;
+    transition: all var(--duration-fast) var(--ease-standard);
+  }
+
+  .btn-cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .copied-toast {
+    position: fixed;
+    top: 6rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-0.5rem);
+    z-index: 50;
+    background: var(--accent-lime);
+    color: #3d5a0a;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-soft);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 300ms;
+  }
+
+  .copied-toast.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    .cta-section {
+      margin: 0 12px;
+      padding: 60px 20px 80px;
+    }
+  }
+</style>

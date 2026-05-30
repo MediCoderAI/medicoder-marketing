@@ -1,0 +1,150 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/MediCoderAIInverted.png" alt="" width="28" height="24" />
+          <span>MediCoder.AI</span>
+        </div>
+        <p class="footer-tagline">
+          Risk adjustment intelligence. No integration required.
+        </p>
+        <p class="footer-desc">
+          Surface missed HCCs, calculate RAF scores, and close revenue gaps —
+          from any clinical note, any format, any EHR.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h3>Company</h3>
+        <ul>
+          <li>
+            <a
+              href="https://calendly.com/samuel-han-medicoder/book-a-consultation"
+              target="_blank"
+              rel="noopener noreferrer">Contact</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        &copy; {new Date().getFullYear()} MediCoder Technologies LLC. All rights
+        reserved.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg-dark);
+    padding: 80px 0 0;
+    margin-top: 40px;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 40px;
+    padding-bottom: 60px;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-logo img {
+    border-radius: 6px;
+  }
+
+  .footer-logo span {
+    font-family: var(--font-logo);
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ink-on-dark);
+  }
+
+  .footer-tagline {
+    margin: 0;
+    color: var(--ink-on-dark);
+    font-size: 16px;
+    font-weight: 500;
+    max-width: 320px;
+  }
+
+  .footer-desc {
+    margin: 0;
+    color: rgba(248, 246, 232, 0.55);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  .footer-links h3 {
+    margin: 0 0 16px;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--ink-on-dark);
+  }
+
+  .footer-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    color: rgba(248, 246, 232, 0.6);
+    font-size: 14px;
+    transition: color 200ms;
+  }
+
+  .footer-links a:hover {
+    color: var(--accent-lime);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 24px 0;
+  }
+
+  .footer-bottom p {
+    margin: 0;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(248, 246, 232, 0.4);
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+</style>
