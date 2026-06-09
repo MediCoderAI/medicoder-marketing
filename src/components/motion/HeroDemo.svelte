@@ -264,7 +264,7 @@
     font-size: 14px;
     color: var(--ink-on-dark);
     background: var(--accent-green);
-    box-shadow: 0 8px 20px rgba(26, 49, 42, 0.3);
+    box-shadow: 0 2px 6px rgba(26, 49, 42, 0.08), 0 8px 20px rgba(26, 49, 42, 0.12);
     animation: scaleIn 400ms ease-out;
   }
 
