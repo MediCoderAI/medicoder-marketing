@@ -24,28 +24,34 @@
   });
 </script>
 
-<div
-  bind:this={element}
-  class:visible
-  class="reveal"
-  style="--r-delay:{delay}ms; --r-dist:{distance}px; --r-dur:{duration}ms; --r-rot:{rotate}deg;"
->
-  <slot />
+<div bind:this={element} class="reveal-frame">
+  <div
+    class:visible
+    class="reveal"
+    style="--r-delay:{delay}ms; --r-dist:{distance}px; --r-dur:{duration}ms; --r-rot:{rotate}deg;"
+  >
+    <slot />
+  </div>
 </div>
 
 <style>
+  .reveal-frame {
+    min-width: 0;
+  }
+
   .reveal {
     opacity: 0;
-    transform: perspective(1300px) translateY(var(--r-dist)) rotateX(var(--r-rot));
+    transform: translate3d(0, var(--r-dist), 0) scale(0.985);
     transition:
       opacity var(--r-dur) var(--ease-standard),
       transform var(--r-dur) var(--ease-standard);
     transition-delay: var(--r-delay);
     will-change: transform, opacity;
+    transform-origin: center top;
   }
 
   .visible {
     opacity: 1;
-    transform: perspective(1300px) translateY(0) rotateX(0deg);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 </style>

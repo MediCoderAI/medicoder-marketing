@@ -58,7 +58,7 @@
           opacity: {isFar ? 0 : 1 - offset * 0.2};
           background: {offset === 0 ? '#1a312a' : `rgba(26,49,42,${0.7 - offset * 0.15})`};
           border-color: {offset === 0 ? 'transparent' : 'rgba(26,49,42,0.15)'};
-          box-shadow: {offset === 0 ? '0 20px 60px rgba(26,49,42,0.3)' : 'none'};
+          box-shadow: {offset === 0 ? '0 1px 2px rgba(26,49,42,0.04), 0 6px 16px rgba(26,49,42,0.06), 0 24px 48px rgba(26,49,42,0.08)' : 'none'};
           pointer-events: {offset === 0 ? 'auto' : 'none'};
           color: {offset === 0 ? '#f8f6e8' : `rgba(248,246,232,${0.9 - offset * 0.2})`};
         "
@@ -112,6 +112,11 @@
 
 <style>
   .carousel { position: relative; }
+
+  .carousel {
+    position: relative;
+    min-width: 0;
+  }
 
   .stage {
     position: relative;

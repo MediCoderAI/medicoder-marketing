@@ -85,13 +85,15 @@ const testimonials = [
     border-radius: var(--radius-md);
     background: var(--bg-dark);
     color: var(--ink-on-dark);
-    box-shadow: 0 20px 60px rgba(26, 49, 42, 0.2);
-    transition: all var(--duration-base) var(--ease-standard);
+    box-shadow: var(--shadow-elevated);
+    transition:
+      transform var(--duration-base) var(--ease-standard),
+      background var(--duration-base) var(--ease-standard);
   }
 
   .testimonial-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 28px 70px rgba(26, 49, 42, 0.3);
+    background: #223b33;
   }
 
   .testimonial-author {

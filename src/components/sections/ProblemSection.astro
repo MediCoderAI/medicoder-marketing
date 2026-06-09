@@ -113,11 +113,15 @@ const problems = [
   .problem-card {
     padding: 36px 32px 32px;
     border-radius: var(--radius-lg);
-    transition: all var(--duration-base) var(--ease-standard);
+    transition:
+      transform var(--duration-base) var(--ease-standard),
+      background var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard);
     display: flex;
     flex-direction: column;
     gap: 20px;
     height: 100%;
+    will-change: transform;
   }
 
   .problem-card:hover {
@@ -129,7 +133,8 @@ const problems = [
     border: 1px solid rgba(209, 234, 103, 0.25);
   }
   .card-lime:hover {
-    box-shadow: 0 20px 48px rgba(209, 234, 103, 0.15), 0 0 0 1px rgba(209, 234, 103, 0.3);
+    background: linear-gradient(160deg, rgba(209, 234, 103, 0.18) 0%, rgba(209, 234, 103, 0.08) 100%);
+    border-color: rgba(209, 234, 103, 0.38);
   }
 
   .card-green {
@@ -137,7 +142,8 @@ const problems = [
     border: 1px solid rgba(26, 49, 42, 0.12);
   }
   .card-green:hover {
-    box-shadow: 0 20px 48px rgba(26, 49, 42, 0.1), 0 0 0 1px rgba(26, 49, 42, 0.18);
+    background: linear-gradient(160deg, rgba(26, 49, 42, 0.12) 0%, rgba(26, 49, 42, 0.05) 100%);
+    border-color: rgba(26, 49, 42, 0.22);
   }
 
   .card-blue {
@@ -145,7 +151,8 @@ const problems = [
     border: 1px solid rgba(99, 163, 255, 0.15);
   }
   .card-blue:hover {
-    box-shadow: 0 20px 48px rgba(99, 163, 255, 0.1), 0 0 0 1px rgba(99, 163, 255, 0.22);
+    background: linear-gradient(160deg, rgba(99, 163, 255, 0.12) 0%, rgba(99, 163, 255, 0.05) 100%);
+    border-color: rgba(99, 163, 255, 0.26);
   }
 
   .card-top {

@@ -137,13 +137,18 @@ import Reveal from "../motion/Reveal.svelte";
 
   .hero-inner {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 60px;
     align-items: center;
     padding: 40px 0 60px;
   }
 
+  .hero-inner > :global(.reveal-frame) {
+    min-width: 0;
+  }
+
   .hero-copy {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -151,6 +156,7 @@ import Reveal from "../motion/Reveal.svelte";
   }
 
   .hero-visual {
+    min-width: 0;
     max-width: 540px;
     width: 100%;
     justify-self: end;
@@ -238,12 +244,15 @@ import Reveal from "../motion/Reveal.svelte";
     border-radius: var(--radius-md);
     border: 1px solid var(--line-subtle);
     background: rgba(255, 255, 255, 0.45);
-    transition: all var(--duration-base) var(--ease-standard);
+    transition:
+      transform var(--duration-base) var(--ease-standard),
+      background var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard);
   }
 
   .service-card:hover {
     background: rgba(255, 255, 255, 0.7);
-    box-shadow: var(--shadow-soft);
+    border-color: rgba(49, 43, 36, 0.22);
     transform: translateY(-4px);
   }
 
@@ -281,9 +290,9 @@ import Reveal from "../motion/Reveal.svelte";
     color: #1d4ed8;
   }
 
-  .service-card:hover .icon-a { box-shadow: 0 0 20px rgba(209, 234, 103, 0.4); }
-  .service-card:hover .icon-b { box-shadow: 0 0 20px rgba(26, 49, 42, 0.25); }
-  .service-card:hover .icon-c { box-shadow: 0 0 20px rgba(99, 163, 255, 0.3); }
+  .service-card:hover .icon-a { box-shadow: 0 0 24px rgba(209, 234, 103, 0.22); }
+  .service-card:hover .icon-b { box-shadow: 0 0 24px rgba(26, 49, 42, 0.14); }
+  .service-card:hover .icon-c { box-shadow: 0 0 24px rgba(99, 163, 255, 0.18); }
 
   .service-card h3 {
     margin: 0;

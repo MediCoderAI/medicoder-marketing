@@ -139,6 +139,20 @@ const tiers = [
     align-items: stretch;
   }
 
+  .pricing-grid > :global(astro-island) {
+    display: block;
+    height: 100%;
+  }
+
+  .pricing-grid > :global(astro-island > *) {
+    height: 100%;
+  }
+
+  .pricing-grid :global(.reveal-frame),
+  .pricing-grid :global(.reveal) {
+    height: 100%;
+  }
+
   /* ── Card base ── */
   .pricing-card {
     display: flex;
@@ -149,13 +163,16 @@ const tiers = [
     border: 1px solid var(--line-subtle);
     box-shadow: var(--shadow-card);
     position: relative;
-    transition: all var(--duration-base) var(--ease-standard);
+    transition:
+      transform var(--duration-base) var(--ease-standard),
+      background var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard);
     height: 100%;
   }
 
   .pricing-card:hover {
     transform: translateY(-6px);
-    box-shadow: var(--shadow-soft);
+    border-color: rgba(49, 43, 36, 0.22);
   }
 
   /* ── Highlighted (Professional) ── */
@@ -163,11 +180,11 @@ const tiers = [
     background: var(--bg-dark);
     border-color: transparent;
     color: var(--ink-on-dark);
-    box-shadow: 0 20px 60px rgba(26, 49, 42, 0.25);
+    box-shadow: var(--shadow-elevated);
   }
 
   .pricing-card.highlighted:hover {
-    box-shadow: 0 28px 70px rgba(26, 49, 42, 0.35);
+    background: #223b33;
   }
 
   .pricing-card.has-badge {
@@ -305,7 +322,7 @@ const tiers = [
   }
 
   .cta-normal:hover {
-    box-shadow: 0 10px 24px rgba(26, 49, 42, 0.25);
+    background: #223b33;
   }
 
   .cta-normal .cta-arrow {
@@ -320,7 +337,7 @@ const tiers = [
   }
 
   .cta-highlighted:hover {
-    box-shadow: 0 10px 24px rgba(209, 234, 103, 0.35);
+    background: #d8ed73;
   }
 
   .cta-highlighted .cta-arrow {
@@ -331,6 +348,10 @@ const tiers = [
   @media (min-width: 768px) {
     .pricing-grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pricing-card {
+      min-height: 444px;
     }
   }
 
