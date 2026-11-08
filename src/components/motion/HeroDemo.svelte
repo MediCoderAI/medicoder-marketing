@@ -5,11 +5,26 @@
   let isPlaying = $state(false);
 
   const hccResults = [
-    { code: "HCC 85", desc: "Congestive Heart Failure", raf: "+0.323", status: "Missed" },
-    { code: "HCC 18", desc: "Diabetes with Chronic Complications", raf: "+0.302", status: "Missed" },
-    { code: "HCC 85", desc: "Coronary Artery Disease", raf: "+0.141", status: "Captured" },
-    { code: "HCC 22", desc: "Morbid Obesity", raf: "+0.250", status: "Missed" },
+    { code: "HCC 85", desc: "Congestive Heart Failure", icd: "I50.9", raf: "+0.323", status: "Missed" },
+    { code: "HCC 18", desc: "Diabetes with Chronic Complications", icd: "E11.40", raf: "+0.302", status: "Missed" },
+    { code: "HCC 85", desc: "Coronary Artery Disease", icd: "I25.10", raf: "+0.141", status: "Captured" },
+    { code: "HCC 22", desc: "Morbid Obesity", icd: "E66.01", raf: "+0.250", status: "Missed" },
   ];
+
+  const noteMeta = [
+    { label: "PATIENT", value: "M, 73 yrs" },
+    { label: "VISIT", value: "Annual wellness" },
+    { label: "DATE", value: "11/04/2026" },
+  ];
+
+  const vitals = [
+    { label: "BP", value: "138/86" },
+    { label: "HR", value: "76" },
+    { label: "BMI", value: "42.1" },
+    { label: "A1c", value: "8.2%" },
+  ];
+
+  const missedCount = hccResults.filter((r) => r.status === "Missed").length;
 
   const timings = [1500, 2000, 200, 2000, 4000];
 
@@ -36,7 +51,7 @@
   <div class="demo-card">
     <div
       class="slide-wrap"
-      style="transform: translateY({animationStep >= 4 ? '-100%' : '0'})"
+      style="transform: translateY({animationStep >= 4 ? '-50%' : '0'})"
     >
       <!-- Slide 1: Clinical Note -->
       <div class="slide">
@@ -54,15 +69,41 @@
         </div>
 
         <div class="note-body" class:fade-in={animationStep === 0}>
-          <p>
-            73-year-old male presents for annual check-up. History of
-            <mark>congestive heart failure</mark>
-            and <mark>type 2 diabetes with neuropathy</mark>.
-          </p>
-          <p>
-            BMI 42. <mark>Morbid obesity</mark> documented. Prior
-            <mark>coronary artery disease</mark> with stent 04/2022.
-          </p>
+          <dl class="note-meta">
+            {#each noteMeta as m}
+              <div>
+                <dt class="mono">{m.label}</dt>
+                <dd>{m.value}</dd>
+              </div>
+            {/each}
+          </dl>
+
+          <div class="note-section">
+            <span class="section-label mono">HPI</span>
+            <p>
+              73-year-old male presents for annual check-up. History of
+              <mark>congestive heart failure</mark>
+              and <mark>type 2 diabetes with neuropathy</mark>.
+            </p>
+          </div>
+
+          <div class="vitals">
+            {#each vitals as v}
+              <span class="vital">
+                <span class="vital-label mono">{v.label}</span>
+                <span class="vital-value">{v.value}</span>
+              </span>
+            {/each}
+          </div>
+
+          <div class="note-section">
+            <span class="section-label mono">ASSESSMENT</span>
+            <p>
+              <mark>Morbid obesity</mark> documented. Prior
+              <mark>coronary artery disease</mark> with stent 04/2022.
+              Continue current regimen; follow up in 3 months.
+            </p>
+          </div>
         </div>
 
         <div class="action-area">
@@ -96,14 +137,18 @@
         <div class="row-header">
           <span class="label-badge results-badge mono">HCC GAP ANALYSIS</span>
           <div class="rule"></div>
+          <span class="gap-count mono">{missedCount} gaps found</span>
         </div>
 
         <div class="results-list">
           {#each hccResults as item}
-            <div class="result-row">
+            <div class="result-row" class:is-missed={item.status === "Missed"}>
               <div class="result-left">
                 <span class="result-code mono">{item.code}</span>
-                <span class="result-desc">{item.desc}</span>
+                <div class="result-text">
+                  <span class="result-desc">{item.desc}</span>
+                  <span class="result-icd mono">ICD-10 · {item.icd}</span>
+                </div>
               </div>
               <div class="result-right">
                 <span class="result-raf mono">{item.raf}</span>
@@ -164,21 +209,22 @@
     box-shadow: var(--shadow-card);
   }
 
+  /* Two stacked slides, each exactly one card tall; shift by -50% to reveal results */
   .slide-wrap {
     position: absolute;
-    inset: 0;
-    padding: 28px;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200%;
     transition: transform 700ms ease-in-out;
   }
 
   .slide {
-    height: 100%;
+    height: 50%;
+    padding: 28px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-  }
-
-  .slide-results {
-    padding-top: 2.5rem;
   }
 
   .mono {
@@ -223,7 +269,17 @@
     background: var(--line-subtle);
   }
 
+  .gap-count {
+    font-size: 11px;
+    font-weight: 600;
+    color: #b91c1c;
+    white-space: nowrap;
+  }
+
   .note-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
     color: var(--ink-strong);
     line-height: 1.7;
     font-size: 14px;
@@ -234,7 +290,78 @@
   }
 
   .note-body p {
-    margin: 0 0 10px;
+    margin: 0;
+  }
+
+  .note-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 12px 0;
+    border-top: 1px dashed var(--line-subtle);
+    border-bottom: 1px dashed var(--line-subtle);
+  }
+
+  .note-meta > div + div {
+    padding-left: 14px;
+    border-left: 1px solid var(--line-subtle);
+  }
+
+  .note-meta dt {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    opacity: 0.8;
+  }
+
+  .note-meta dd {
+    margin: 2px 0 0;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .note-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    opacity: 0.8;
+  }
+
+  .vitals {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .vital {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(49, 43, 36, 0.04);
+  }
+
+  .vital-label {
+    font-size: 10px;
+    color: var(--ink-muted);
+  }
+
+  .vital-value {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
   }
 
   mark {
@@ -245,10 +372,13 @@
     font-weight: 500;
   }
 
+  /* Pinned to the bottom of the card with a fixed height so steps don't shift layout */
   .action-area {
+    margin-top: auto;
+    min-height: 46px;
     display: flex;
+    align-items: center;
     justify-content: center;
-    padding-top: 3.5rem;
   }
 
   .analyze-btn {
@@ -298,19 +428,29 @@
     font-size: 14px;
   }
 
+  /* Rows stretch to share all remaining height above the summary */
   .results-list {
+    flex: 1;
+    min-height: 0;
     display: grid;
-    gap: 6px;
+    grid-auto-rows: 1fr;
+    gap: 8px;
   }
 
   .result-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px;
+    gap: 12px;
+    padding: 0 14px;
     background: rgba(49, 43, 36, 0.04);
+    border-left: 3px solid rgba(209, 234, 103, 0.9);
     border-radius: 8px;
-    transition: all 200ms;
+    transition: background 200ms;
+  }
+
+  .result-row.is-missed {
+    border-left-color: rgba(185, 28, 28, 0.55);
   }
 
   .result-row:hover {
@@ -320,23 +460,42 @@
   .result-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     min-width: 0;
   }
 
   .result-code {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--ink-strong);
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid var(--line-subtle);
+    white-space: nowrap;
     flex-shrink: 0;
   }
 
+  .result-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
   .result-desc {
-    font-size: 13px;
-    color: var(--ink-muted);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-strong);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .result-icd {
+    font-size: 11px;
+    color: var(--ink-muted);
+    opacity: 0.8;
   }
 
   .result-right {
@@ -370,11 +529,11 @@
   }
 
   .raf-summary {
-    margin-top: 10px;
-    padding: 14px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--line-subtle);
-    background: rgba(49, 43, 36, 0.03);
+    margin-top: 12px;
+    padding: 18px 20px;
+    border-radius: 12px;
+    background: var(--accent-green);
+    color: var(--ink-on-dark);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -382,26 +541,28 @@
 
   .raf-label {
     font-size: 10px;
-    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+    color: rgba(248, 246, 232, 0.65);
     margin-bottom: 4px;
   }
 
   .raf-value {
     font-family: var(--font-heading);
     font-weight: 500;
-    font-size: 22px;
-    color: var(--ink-strong);
+    font-size: 28px;
+    line-height: 1.1;
+    color: var(--ink-on-dark);
     letter-spacing: -0.02em;
   }
 
   .raf-green {
-    color: var(--accent-green);
+    color: var(--accent-lime);
   }
 
   .raf-unit {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
-    color: var(--ink-muted);
+    color: rgba(248, 246, 232, 0.65);
   }
 
   .raf-right {
@@ -476,25 +637,35 @@
 
   @media (max-width: 640px) {
     .demo-card {
-      height: 500px;
+      height: 560px;
     }
 
-    .slide-wrap {
-      padding: 16px;
+    .slide {
+      padding: 18px;
+    }
+
+    .note-body {
+      gap: 14px;
+    }
+
+    .vitals {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .result-row {
       flex-direction: column;
       align-items: flex-start;
-      gap: 4px;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+    }
+
+    .result-code {
+      display: none;
     }
 
     .raf-value {
-      font-size: 18px;
-    }
-
-    .action-area {
-      padding-top: 5rem;
+      font-size: 22px;
     }
   }
 </style>
