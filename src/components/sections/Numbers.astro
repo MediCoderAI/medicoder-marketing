@@ -1,0 +1,62 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+import { stats } from "../../lib/content";
+---
+
+<section class="numbers section" id="numbers">
+  <div class="container">
+    <div class="head">
+      <p class="eyebrow">Why it matters</p>
+      <h2 class="h2">V28 changed the rules. <span class="muted">Your coding should keep up.</span></h2>
+    </div>
+    <dl class="stats">
+      {
+        stats.map((s, i) => (
+          <Reveal client:visible delay={i * 80} distance={20}>
+            <div class="stat">
+              <dt>{s.value}</dt>
+              <dd>{s.label}</dd>
+            </div>
+          </Reveal>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .stats {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .stat {
+    padding-top: 24px;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  dt {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 5.4vw, 76px);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+  }
+
+  dd {
+    margin: 16px 0 0;
+    max-width: 22ch;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 900px) {
+    .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 48px;
+    }
+  }
+</style>

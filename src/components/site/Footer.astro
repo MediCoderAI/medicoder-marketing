@@ -1,0 +1,126 @@
+---
+import { BOOK_URL, CONTACT_EMAIL } from "../../lib/site";
+
+const columns = [
+  {
+    title: "Product",
+    links: [
+      { label: "How it works", href: "/how-it-works/" },
+      { label: "Pricing", href: "/pricing/" },
+      { label: "Security", href: "/security/" },
+      { label: "FAQ", href: "/#faq" },
+    ],
+  },
+  {
+    title: "Get in touch",
+    links: [
+      { label: "Book a call", href: BOOK_URL },
+      { label: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
+    ],
+  },
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="top">
+      <div class="about">
+        <a href="/" class="brand"><span class="brand-mark" aria-hidden="true"></span>MediCoder.AI</a>
+        <p>Risk adjustment intelligence for primary care. Any note, any format, any EHR.</p>
+      </div>
+      {
+        columns.map((col) => (
+          <nav aria-label={col.title}>
+            <p class="col-title">{col.title}</p>
+            <ul>
+              {col.links.map((l) => (
+                <li>
+                  <a href={l.href} {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="bottom">
+      <span>&copy; {new Date().getFullYear()} MediCoder Technologies LLC. All rights reserved.</span>
+      <span>HIPAA compliant · Encrypted in transit &amp; at rest · BAA available</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 64px 0 40px;
+    font-size: 14px;
+  }
+
+  .top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .brand {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .about p {
+    margin: 12px 0 0;
+    max-width: 320px;
+    color: var(--ink-3);
+  }
+
+  .col-title {
+    margin: 0 0 14px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  ul a {
+    color: var(--ink-2);
+    transition: color 0.2s;
+  }
+
+  ul a:hover {
+    color: var(--ink);
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 720px) {
+    .top {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

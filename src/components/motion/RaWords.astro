@@ -1,0 +1,51 @@
+---
+// Renders read-along markup as `.w` word spans holding `.c` character spans,
+// with `[[phrase|id]]` groups wrapped in `.ph[data-phrase]`. Visual only —
+// callers provide the accessible text separately.
+import { parseReadAlong, fakeCipher } from "../../lib/readAlong";
+
+interface Props {
+  text: string;
+  /** phrase ids rendered as quieter "evidence" underlines */
+  evidence?: string[];
+  /** add ciphertext (`data-c`) to each word for encrypt scenes */
+  cipher?: boolean;
+}
+
+const { text, evidence = [], cipher = false } = Astro.props;
+let n = 0;
+const word = (w: string) => ({ w, chars: Array.from(w), c: cipher ? fakeCipher(w, n++) : undefined });
+---
+
+{
+  parseReadAlong(text).map((p) =>
+    p.kind === "word" ? (
+      <Fragment>
+        {(() => {
+          const x = word(p.text);
+          return (
+            <span class="w" data-c={x.c}>
+              {x.chars.map((ch) => <span class="c">{ch}</span>)}
+            </span>
+          );
+        })()}{" "}
+      </Fragment>
+    ) : (
+      <Fragment>
+        <span class:list={["ph", { ev: evidence.includes(p.id) }]} data-phrase={p.id}>
+          {p.words.map((w, i) => {
+            const x = word(w);
+            return (
+              <Fragment>
+                <span class="w" data-c={x.c}>
+                  {x.chars.map((ch) => <span class="c">{ch}</span>)}
+                </span>
+                {i < p.words.length - 1 ? " " : ""}
+              </Fragment>
+            );
+          })}
+        </span>{" "}
+      </Fragment>
+    ),
+  )
+}

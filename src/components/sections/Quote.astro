@@ -1,0 +1,64 @@
+---
+import ReadAlong from "../motion/ReadAlong.astro";
+import { quote } from "../../lib/content";
+---
+
+<section class="quote on-green" id="testimonial">
+  <div class="container inner">
+    <svg class="mark" width="40" height="32" viewBox="0 0 40 32" fill="currentColor" aria-hidden="true">
+      <path d="M0 32V19.2C0 8.6 5.6 2.2 16.8 0l1.6 3.6C12.2 5.4 9.2 9 8.8 14.4H16V32H0zm22 0V19.2C22 8.6 27.6 2.2 38.8 0l1.2 3.6C34 5.4 31 9 30.6 14.4H38V32H22z" />
+    </svg>
+    <figure>
+      <ReadAlong as="blockquote" text={quote.text} size="lg" />
+      <figcaption>
+        <span class="name">{quote.cite}</span>
+        <span class="role">{quote.role}</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .quote {
+    background: var(--green);
+    color: var(--on-green);
+    padding-block: var(--section-pad);
+    border-radius: var(--radius-lg);
+    margin-inline: clamp(8px, 1.6vw, 24px);
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .mark {
+    color: var(--green-lift);
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure :global(blockquote) {
+    max-width: 24ch;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 40px;
+    font-size: 15px;
+  }
+
+  .name {
+    font-weight: 500;
+    color: var(--on-green);
+  }
+
+  .role {
+    color: var(--on-green-2);
+  }
+</style>

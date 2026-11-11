@@ -8,6 +8,12 @@
   const typingSpeed = 80;
 
   onMount(() => {
+    // Plays on every home load; skipped on deep links (e.g. /#faq). See MarketingLayout.
+    if (document.documentElement.classList.contains("skip-intro")) {
+      isVisible = false;
+      return;
+    }
+
     let i = 0;
     const interval = setInterval(() => {
       if (i <= fullText.length) {
@@ -23,7 +29,9 @@
   });
 
   function dismiss() {
+    if (isAnimatingOut) return;
     isAnimatingOut = true;
+    window.dispatchEvent(new Event("intro:done"));
     setTimeout(() => (isVisible = false), 800);
   }
 </script>
@@ -33,6 +41,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     class="intro"
+    data-intro
     class:out={isAnimatingOut}
     onclick={dismiss}
   >
@@ -53,7 +62,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-page);
+    background: var(--bg);
     cursor: pointer;
     transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
       opacity 700ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -66,11 +75,11 @@
 
   .intro-title {
     margin: 0;
-    font-family: var(--font-heading);
+    font-family: var(--font-sans);
     font-weight: 400;
     font-size: clamp(40px, 6vw, 72px);
-    color: var(--ink-strong);
-    letter-spacing: -0.03em;
+    color: var(--ink);
+    letter-spacing: -0.04em;
     line-height: 1;
   }
 
@@ -79,7 +88,7 @@
     width: 3px;
     height: 0.85em;
     margin-left: 2px;
-    background: var(--ink-strong);
+    background: var(--green);
     vertical-align: baseline;
     animation: blink 1s step-end infinite;
   }

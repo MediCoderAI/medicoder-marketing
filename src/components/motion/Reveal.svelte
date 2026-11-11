@@ -43,8 +43,8 @@
     opacity: 0;
     transform: translate3d(0, var(--r-dist), 0) scale(0.985);
     transition:
-      opacity var(--r-dur) var(--ease-standard),
-      transform var(--r-dur) var(--ease-standard);
+      opacity var(--r-dur) var(--ease),
+      transform var(--r-dur) var(--ease);
     transition-delay: var(--r-delay);
     will-change: transform, opacity;
     transform-origin: center top;

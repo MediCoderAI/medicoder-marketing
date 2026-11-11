@@ -1,0 +1,55 @@
+---
+// Inline read-along copy: once the block scrolls into view, the text generates
+// character by character. Markup: `[[flagged phrase|id]]` gets an underline once typed.
+import RaWords from "./RaWords.astro";
+import { plainReadAlong } from "../../lib/readAlong";
+
+interface Props {
+  text: string;
+  as?: "p" | "h2" | "h3" | "blockquote";
+  size?: "xl" | "lg" | "md";
+  class?: string;
+}
+
+const { text, as: Tag = "p", size = "lg", class: className } = Astro.props;
+---
+
+<Tag class:list={["ra", `ra-${size}`, className]} data-read-along>
+  <span class="sr-only">{plainReadAlong(text)}</span>
+  <span aria-hidden="true"><RaWords text={text} /></span>
+</Tag>
+
+<script>
+  import { playWords, punctuationPause } from "../../lib/wordPlayer";
+
+  // ms per character, by size: big type types a touch slower so it reads.
+  const PACE: Record<string, number> = { xl: 20, lg: 12, md: 11 };
+
+  const start = (el: HTMLElement) => {
+    const words = Array.from(el.querySelectorAll<HTMLElement>(".w"));
+    const size = el.className.match(/ra-(xl|lg|md)/)?.[1] ?? "lg";
+    const endsPhrase = (i: number) => {
+      const ph = words[i].closest<HTMLElement>(".ph");
+      return ph && ph.querySelector(".w:last-of-type") === words[i] ? ph : null;
+    };
+    playWords(words, {
+      pace: PACE[size],
+      delay: 150,
+      pauseAfter: (i) => (endsPhrase(i) ? 220 : punctuationPause(words[i])),
+      onWord: (i) => endsPhrase(i)?.classList.add("hit"),
+    });
+  };
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        io.unobserve(e.target);
+        start(e.target as HTMLElement);
+      }
+    },
+    { rootMargin: "0px 0px -30% 0px", threshold: 0.2 },
+  );
+
+  document.querySelectorAll<HTMLElement>("[data-read-along]").forEach((el) => io.observe(el));
+</script>

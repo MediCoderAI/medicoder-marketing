@@ -1,0 +1,259 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+import { features } from "../../lib/content";
+---
+
+<section class="features section" id="features">
+  <div class="container">
+    <div class="head">
+      <p class="eyebrow">What we do</p>
+      <h2 class="h2">From clinical notes <span class="muted">to captured revenue.</span></h2>
+      <p class="lede">Risk adjustment intelligence and FFS coding under one roof — purpose-built for primary care.</p>
+    </div>
+
+    <div class="grid">
+      {
+        features.map((f, i) => (
+          <Reveal client:visible delay={(i % 3) * 80} distance={24}>
+            <article class="card feature">
+              <div class="motif" aria-hidden="true">
+                {f.motif === "raf" && (
+                  <div class="m-stack">
+                    <span class="m-label">RAF score</span>
+                    <span class="m-big">1.847</span>
+                    <span class="tag green">HCC 37 · +0.166</span>
+                  </div>
+                )}
+                {f.motif === "spec" && (
+                  <div class="m-row">
+                    <span class="m-code old">E11.9</span>
+                    <span class="m-arrow">→</span>
+                    <span class="m-code">E11.42</span>
+                  </div>
+                )}
+                {f.motif === "recap" && (
+                  <div class="m-list">
+                    <span><b class="mono">I50.22</b><em>2025 · captured</em></span>
+                    <span class="due"><b class="mono">I50.22</b><em>2026 · recapture due</em></span>
+                  </div>
+                )}
+                {f.motif === "batch" && (
+                  <div class="m-stack wide">
+                    <span class="m-label">248 notes</span>
+                    <span class="m-bar"><i></i></span>
+                    <span class="m-label small">Processing panel · 72%</span>
+                  </div>
+                )}
+                {f.motif === "ffs" && (
+                  <div class="m-tags">
+                    <span class="tag">ICD-10-CM</span>
+                    <span class="tag">CPT</span>
+                    <span class="tag">HCPCS</span>
+                    <span class="m-code sm">99214</span>
+                  </div>
+                )}
+                {f.motif === "secure" && (
+                  <div class="m-stack">
+                    <span class="m-cipher">9f3a c21e 7b04 d8e6</span>
+                    <div class="m-tags">
+                      <span class="tag green">In transit</span>
+                      <span class="tag green">At rest</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <h3 class="h3">{f.title}</h3>
+              <p>{f.desc}</p>
+            </article>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .grid > :global(astro-island) {
+    display: flex;
+  }
+
+  .grid :global(.reveal) {
+    flex: 1;
+    display: flex;
+  }
+
+  .feature {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 12px 28px;
+    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  }
+
+  .feature:hover {
+    transform: translateY(-3px);
+  }
+
+  .feature .h3 {
+    margin: 24px 16px 8px;
+  }
+
+  .feature p {
+    margin: 0 16px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+
+  .motif {
+    height: 168px;
+    border-radius: calc(var(--radius-lg) - 8px);
+    background: var(--bg);
+    display: grid;
+    place-items: center;
+    padding: 20px;
+  }
+
+  .m-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .m-stack.wide {
+    width: 80%;
+    align-items: stretch;
+  }
+
+  .m-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-3);
+  }
+
+  .m-label.small {
+    font-size: 11px;
+  }
+
+  .m-big {
+    font-family: var(--font-display);
+    font-size: 52px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .m-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .m-code {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 24px;
+    color: var(--green);
+  }
+
+  .m-code.old {
+    color: var(--unread);
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+  }
+
+  .m-code.sm {
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .m-arrow {
+    color: var(--ink-3);
+  }
+
+  .m-list {
+    display: grid;
+    gap: 8px;
+    width: 88%;
+  }
+
+  .m-list span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 13px;
+  }
+
+  .m-list b {
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .m-list em {
+    font-style: normal;
+    color: var(--ink-3);
+  }
+
+  .m-list .due {
+    border-color: var(--green);
+  }
+
+  .m-list .due em {
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  .m-bar {
+    height: 6px;
+    border-radius: 6px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .m-bar i {
+    display: block;
+    width: 72%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--green);
+  }
+
+  .m-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    max-width: 220px;
+  }
+
+  .m-cipher {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    color: var(--green);
+  }
+
+  @media (max-width: 960px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+import { steps } from "../../lib/content";
+---
+
+<section class="steps section" id="steps">
+  <div class="container">
+    <div class="head">
+      <p class="eyebrow">Three steps</p>
+      <h2 class="h2">Upload. Analyze. <span class="muted">Report.</span></h2>
+    </div>
+
+    <div class="list">
+      {
+        steps.map((s, i) => (
+          <Reveal client:visible distance={24}>
+            <article class="step">
+              <span class="num">0{i + 1}</span>
+              <h3 class="title">{s.title}</h3>
+              <div class="body">
+                <p>{s.body}</p>
+                <ul class="tags">
+                  {s.tags.map((t) => (
+                    <li class="tag">{t}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: 32px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--green-lift);
+    padding-top: 10px;
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(32px, 3.6vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .body p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+
+  .tags {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tags .tag {
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  @media (max-width: 860px) {
+    .step {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .num {
+      padding-top: 0;
+    }
+  }
+</style>

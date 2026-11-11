@@ -1,0 +1,38 @@
+---
+// A single large read-along statement. The house style for "big idea" moments.
+import ReadAlong from "../motion/ReadAlong.astro";
+
+interface Props {
+  eyebrow?: string;
+  text: string;
+  size?: "xl" | "lg" | "md";
+  link?: { label: string; href: string };
+  id?: string;
+}
+
+const { eyebrow, text, size = "lg", link, id } = Astro.props;
+---
+
+<section class="statement section" id={id}>
+  <div class="container inner">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <ReadAlong text={text} size={size} />
+    {link && <a href={link.href} class="link-arrow">{link.label}</a>}
+  </div>
+</section>
+
+<style>
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .inner :global(.ra) {
+    max-width: 22ch;
+  }
+
+  .inner :global(.ra-lg) {
+    max-width: 26ch;
+  }
+</style>
