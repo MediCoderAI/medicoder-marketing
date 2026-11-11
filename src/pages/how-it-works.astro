@@ -1,0 +1,94 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import ScrollReader from "../components/motion/ScrollReader.astro";
+import PageHero from "../components/sections/PageHero.astro";
+import Steps from "../components/sections/Steps.astro";
+import Statement from "../components/sections/Statement.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import Reveal from "../components/motion/Reveal.svelte";
+import { workflowScenes, audiences } from "../lib/content";
+import { BOOK_URL } from "../lib/site";
+---
+
+<MarketingLayout
+  title="How it works | MediCoder.AI"
+  description="Upload clinical notes from any EHR. MediCoder.AI reads every word, surfaces missed HCCs with MEAT evidence, and scores RAF under CMS-HCC V28."
+>
+  <PageHero
+    eyebrow="How it works"
+    title="From note to revenue,"
+    soft="in minutes."
+    lede="Upload notes from any EHR, in any format. MediCoder.AI reads every word, links each code to its evidence and shows the dollar impact."
+  >
+    <a href={BOOK_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Start a free audit</a>
+    <a href="#read" class="btn btn-ghost">Watch it read</a>
+  </PageHero>
+
+  <ScrollReader id="read" label="How MediCoder reads a clinical note" scenes={workflowScenes} doneStatus="Coded · 2 HCCs" />
+
+  <Steps />
+
+  <Statement
+    eyebrow="Evidence, not guesses"
+    text="Every suggested code arrives with the words that support it — [[monitored, evaluated, assessed or treated|m]] — so your coders review faster and each code is easier to defend in an audit."
+  />
+
+  <section class="audiences section">
+    <div class="container">
+      <div class="head">
+        <p class="eyebrow">Built for</p>
+        <h2 class="h2">Any practice that codes <span class="muted">risk-adjusted care.</span></h2>
+      </div>
+      <ul class="aud">
+        {
+          audiences.map((a, i) => (
+            <Reveal client:visible delay={i * 70} distance={16}>
+              <li>
+                <span class="mono">0{i + 1}</span>
+                {a}
+              </li>
+            </Reveal>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</MarketingLayout>
+
+<style>
+  .aud {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .aud li {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line-strong);
+    font-family: var(--font-display);
+    font-size: clamp(26px, 2.6vw, 34px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+
+  .aud .mono {
+    font-size: 13px;
+    color: var(--green-lift);
+  }
+
+  @media (max-width: 860px) {
+    .aud {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 40px;
+    }
+  }
+</style>

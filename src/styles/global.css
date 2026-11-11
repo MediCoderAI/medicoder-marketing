@@ -9,28 +9,26 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  overflow-x: hidden;
-  font-family: var(--font-body);
-  font-size: 15px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.5;
-  color: var(--ink-base);
-  background: var(--bg-page);
+  overflow-x: clip;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "cv03" on, "cv04" on, "cv09" on, "cv11" on;
 }
 
 ::selection {
-  background: var(--accent-lime);
-  color: var(--ink-strong);
+  background: var(--green);
+  color: var(--on-green);
 }
 
 a {
@@ -38,221 +36,216 @@ a {
   text-decoration: none;
 }
 
-img {
+img,
+svg {
   display: block;
   max-width: 100%;
 }
 
 button,
-input,
-textarea,
-select {
+input {
   font: inherit;
 }
 
-main {
-  position: relative;
-  overflow-x: hidden;
+:focus-visible {
+  outline: 2px solid var(--green-lift);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-.shell {
-  position: relative;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ─── Container ─── */
 .container {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding-inline: var(--container-pad);
+  padding-inline: var(--gutter);
 }
 
-/* ─── Typography ─── */
-.section-heading {
+.section {
+  padding-block: var(--section-pad);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ─── Type ─── */
+.display,
+.h1,
+.h2 {
   margin: 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(30px, 2.2vw + 16px, 50px);
-  color: var(--ink-strong);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.h1 {
+  font-size: clamp(52px, 8.4vw, 116px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.h2 {
+  font-size: clamp(38px, 5.2vw, 68px);
+  line-height: 1.02;
   letter-spacing: -0.03em;
-  line-height: 1.2;
 }
 
-.section-heading em {
-  font-style: italic;
-  font-weight: 400;
-}
-
-.section-copy {
+.h3 {
   margin: 0;
-  max-width: 490px;
-  color: var(--ink-base);
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--ink);
 }
 
-.gradient-text {
-  background: linear-gradient(to right, var(--ink-strong), var(--accent-lime));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.muted {
+  color: var(--unread);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--green-lift);
+}
+
+.lede {
+  margin: 0;
+  max-width: 560px;
+  font-size: clamp(18px, 1.6vw, 21px);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--ink-2);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Section heading block ─── */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 64px;
+}
+
+.head.center {
+  align-items: center;
+  text-align: center;
+}
+
+.head.center .lede {
+  margin-inline: auto;
 }
 
 /* ─── Buttons ─── */
-.btn-pill {
+.btn {
   display: inline-flex;
   align-items: center;
-  gap: 1.25rem;
-  padding: 0.6rem 0.35rem 0.6rem 1.6rem;
+  justify-content: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 22px;
+  border: 0;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--line-subtle);
-  background: var(--glass-light);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: var(--ink-strong);
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
   cursor: pointer;
-  transition: transform var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
+  transition:
+    background-color 0.25s var(--ease),
+    color 0.25s var(--ease),
+    transform 0.25s var(--ease);
 }
 
-.btn-pill:hover {
-  transform: translateY(-2px);
+.btn:active {
+  transform: scale(0.98);
 }
 
-.btn-pill .arrow-circle {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: var(--accent-green);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-on-dark);
-  transition: transform var(--duration-fast) var(--ease-standard);
+.btn-primary {
+  background: var(--green);
+  color: var(--on-green);
 }
 
-.btn-pill:hover .arrow-circle {
-  transform: translateX(4px);
+.btn-primary:hover {
+  background: var(--green-2);
 }
 
-.btn-dark {
-  display: inline-flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 0.6rem 0.35rem 0.6rem 1.6rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--line-subtle);
-  background: var(--accent-green);
-  color: var(--ink-on-dark);
-  font-size: 15px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: transform var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
-}
-
-.btn-dark:hover {
-  transform: translateY(-2px);
-}
-
-.btn-dark .arrow-circle {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-on-dark);
-  transition: transform var(--duration-fast) var(--ease-standard);
-}
-
-.btn-dark:hover .arrow-circle {
-  transform: translateX(4px);
-}
-
-.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.85rem 1.6rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--line-subtle);
+.btn-ghost {
   background: transparent;
-  color: var(--ink-strong);
-  font-size: 15px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-standard);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 
-.btn-outline:hover {
-  background: rgba(49, 43, 36, 0.06);
-  transform: translateY(-1px);
+.btn-ghost:hover {
+  background: var(--surface);
+}
+
+.btn-light {
+  background: var(--on-green);
+  color: var(--green);
+}
+
+.btn-light:hover {
+  background: #fff;
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--green);
+}
+
+.link-arrow::after {
+  content: "→";
+  transition: transform 0.25s var(--ease);
+}
+
+.link-arrow:hover::after {
+  transform: translateX(3px);
 }
 
 /* ─── Cards ─── */
-.card-glass {
-  padding: 30px;
-  border-radius: var(--radius-md);
-  background: var(--glass-card);
-  border: 1px solid var(--line-subtle);
-  transition: all var(--duration-base) var(--ease-standard);
-}
-
-.card-glass:hover {
-  background: rgba(255, 255, 255, 0.35);
-  transform: translateY(-4px);
-}
-
-.card-white {
-  padding: 30px;
-  border-radius: var(--radius-sm);
-  background: white;
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  transition: all var(--duration-base) var(--ease-standard);
 }
 
-.card-white:hover {
-  transform: translateY(-4px);
-}
-
-.card-dark {
-  padding: 30px;
-  border-radius: var(--radius-md);
-  background: var(--bg-dark);
-  color: var(--ink-white);
-}
-
-/* ─── Badge ─── */
-.badge {
+.tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.85rem;
+  height: 24px;
+  padding: 0 10px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--line-subtle);
-  background: var(--glass-light);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: var(--ink-strong);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  background: var(--surface-2);
+  color: var(--ink-2);
 }
 
-/* ─── Glassmorphism ─── */
-.glass {
-  background: var(--glass-nav);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.tag.green {
+  background: var(--green);
+  color: var(--on-green);
 }
 
-/* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -261,8 +254,110 @@ main {
   *,
   *::before,
   *::after {
+    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
   }
+}
+
+/* ─── Read-along text ───
+   Copy is generated character by character, with a cursor, once its section is
+   reached. Untyped text is invisible but still takes up its space, so lines never
+   reflow while typing. Gated on `.js` so the copy stays legible without JavaScript. */
+.ra {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.ra-xl {
+  font-size: clamp(40px, 6.6vw, 96px);
+  line-height: 1.03;
+  letter-spacing: -0.032em;
+}
+
+.ra-lg {
+  font-size: clamp(30px, 4.4vw, 60px);
+  line-height: 1.1;
+  letter-spacing: -0.028em;
+}
+
+.ra-md {
+  font-size: clamp(21px, 3vw, 44px);
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+}
+
+.js .ra .c {
+  transition: color 0.18s ease-out;
+}
+
+.js .ra .c:not(.on) {
+  color: transparent;
+}
+
+/* Typing cursor on the newest character. */
+.js .ra .c.caret {
+  box-shadow: 0.07em 0 0 var(--green-lift);
+}
+
+.ra .ph {
+  background: linear-gradient(var(--green), var(--green)) no-repeat 0 92% / 0% 2px;
+  transition: background-size 0.6s var(--ease);
+}
+
+.ra .ph.hit,
+html:not(.js) .ra .ph {
+  background-size: 100% 2px;
+}
+
+/* A flagged phrase settles into green once it has been fully typed. */
+.ra .ph .w {
+  transition: color 0.4s var(--ease);
+}
+
+.js .ra .ph.hit .w {
+  color: var(--green);
+}
+
+/* Dark (green) surfaces */
+.on-green .ra {
+  color: var(--on-green);
+}
+
+.js .on-green .ra .c.caret {
+  box-shadow: 0.07em 0 0 #9cc3b3;
+}
+
+.on-green .ra .ph {
+  background-image: linear-gradient(var(--on-green), var(--on-green));
+}
+
+.js .on-green .ra .ph.hit .w {
+  color: var(--on-green);
+}
+
+/* Intro is hidden before first paint on deep links (e.g. /#faq). */
+.skip-intro [data-intro] {
+  display: none;
+}
+
+/* ─── Brand mark ───
+   The caduceus is a mask filled with currentColor, so mark and wordmark are
+   always one colour. */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-mark {
+  flex: none;
+  width: 1.5em;
+  height: 1.5em;
+  background: currentColor;
+  -webkit-mask: url("/logo-mark.png") center / contain no-repeat;
+  mask: url("/logo-mark.png") center / contain no-repeat;
 }

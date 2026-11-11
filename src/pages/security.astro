@@ -1,0 +1,147 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import ScrollReader from "../components/motion/ScrollReader.astro";
+import PageHero from "../components/sections/PageHero.astro";
+import Statement from "../components/sections/Statement.astro";
+import Faq from "../components/sections/Faq.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import Reveal from "../components/motion/Reveal.svelte";
+import { encryptionScenes, faqs } from "../lib/content";
+import { CONTACT_EMAIL } from "../lib/site";
+
+const pillars = [
+  {
+    title: "Encrypted in transit",
+    body: "Notes are encrypted from the moment they leave your browser until they reach MediCoder.",
+    icon: "transit",
+  },
+  {
+    title: "Encrypted at rest",
+    body: "Your notes and results are encrypted wherever they're stored — never sitting on disk in plain text.",
+    icon: "lock",
+  },
+  {
+    title: "HIPAA compliant",
+    body: "MediCoder.AI is built to handle protected health information, with a Business Associate Agreement available for every customer.",
+    icon: "shield",
+  },
+  {
+    title: "No EHR integration",
+    body: "Nothing connects to your EHR. You choose exactly which notes to upload — no system access, no IT ticket.",
+    icon: "plug",
+  },
+];
+---
+
+<MarketingLayout
+  title="Security | MediCoder.AI"
+  description="Every note encrypted in transit and at rest. HIPAA compliant with a BAA available, and no EHR integration — you choose what to upload."
+>
+  <PageHero
+    eyebrow="Security"
+    title="Built for PHI"
+    soft="from the first upload."
+    lede="Every note is encrypted in transit and at rest. HIPAA compliant, with a BAA available for every customer."
+  >
+    <a href={`mailto:${CONTACT_EMAIL}?subject=BAA%20request`} class="btn btn-primary">Request a BAA</a>
+    <a href="#encryption" class="btn btn-ghost">See how it's protected</a>
+  </PageHero>
+
+  <section class="pillars">
+    <div class="container grid">
+      {
+        pillars.map((p, i) => (
+          <Reveal client:visible delay={i * 80} distance={24}>
+            <article class="card pillar">
+              <span class="icon" aria-hidden="true">
+                {p.icon === "shield" && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+                    <path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" />
+                    <path stroke-linecap="round" d="M9 12l2 2 4-4" />
+                  </svg>
+                )}
+                {p.icon === "transit" && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12h13M12 7l5 5-5 5" />
+                    <rect x="17.5" y="9" width="4" height="6" rx="1" />
+                  </svg>
+                )}
+                {p.icon === "lock" && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4.5" y="10.5" width="15" height="10" rx="2" />
+                    <path d="M8 10.5V7.5a4 4 0 018 0v3" />
+                    <path d="M12 14.5v2.5" />
+                  </svg>
+                )}
+                {p.icon === "plug" && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z" />
+                  </svg>
+                )}
+              </span>
+              <h2 class="h3">{p.title}</h2>
+              <p>{p.body}</p>
+            </article>
+          </Reveal>
+        ))
+      }
+    </div>
+  </section>
+
+  <ScrollReader id="encryption" label="How a clinical note is protected" scenes={encryptionScenes} doneStatus="Encrypted · in transit & at rest" />
+
+  <Statement
+    eyebrow="Least access by design"
+    text="No integration means no standing connection to your systems. You decide [[what we see|w]] — one note or a batch — and nothing else."
+  />
+
+  <Faq items={[faqs.encryption, faqs.hipaa, faqs.baa, faqs.noIntegration]} title="Security questions." />
+  <CtaBand />
+</MarketingLayout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding-bottom: var(--section-pad);
+  }
+
+  .grid > :global(astro-island),
+  .grid :global(.reveal) {
+    display: flex;
+    flex: 1;
+  }
+
+  .pillar {
+    flex: 1;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: var(--green-soft);
+    color: var(--green);
+  }
+
+  .pillar p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

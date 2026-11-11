@@ -1,0 +1,88 @@
+---
+// Sub-page hero: eyebrow, a serif headline whose words resolve in on load,
+// and a lede. `soft` renders as the pale "unread" tone after the main line.
+interface Props {
+  eyebrow: string;
+  title: string;
+  soft?: string;
+  lede?: string;
+}
+
+const { eyebrow, title, soft, lede } = Astro.props;
+const words = [
+  ...title.split(" ").map((w) => ({ w, soft: false })),
+  ...(soft ? soft.split(" ").map((w) => ({ w, soft: true })) : []),
+];
+---
+
+<section class="page-hero">
+  <div class="container inner">
+    <p class="eyebrow fade" style="--d:0">{eyebrow}</p>
+    <h1 class="h1 title" aria-label={soft ? `${title} ${soft}` : title}>
+      {
+        words.map(({ w, soft }, i) => (
+          <Fragment>
+            <span class:list={["hw", { soft }]} style={`--i:${i}`} aria-hidden="true">
+              {w}
+            </span>{" "}
+          </Fragment>
+        ))
+      }
+    </h1>
+    {lede && <p class="lede fade" style="--d:1">{lede}</p>}
+    {Astro.slots.has("default") && <div class="actions fade" style="--d:2"><slot /></div>}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    padding-top: calc(var(--header-h) + clamp(72px, 12vw, 152px));
+    padding-bottom: clamp(56px, 8vw, 104px);
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .title {
+    max-width: 15ch;
+  }
+
+  .hw {
+    display: inline-block;
+  }
+
+  .hw.soft {
+    color: var(--unread);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  :global(.js) .hw {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(0.18em);
+    animation: word-in 1s var(--ease) calc(var(--i) * 70ms + 100ms) forwards;
+  }
+
+  :global(.js) .fade {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fade-in 0.9s var(--ease) calc(var(--d) * 120ms + 350ms) forwards;
+  }
+
+  @keyframes word-in {
+    to { opacity: 1; filter: blur(0); transform: none; }
+  }
+
+  @keyframes fade-in {
+    to { opacity: 1; transform: none; }
+  }
+</style>

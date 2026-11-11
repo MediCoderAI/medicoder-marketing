@@ -1,26 +1,29 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import IntroScreen from "../components/motion/IntroScreen.svelte";
-import Header from "../components/site/Header.astro";
+import ScrollReader from "../components/motion/ScrollReader.astro";
 import Hero from "../components/sections/Hero.astro";
-import ProblemSection from "../components/sections/ProblemSection.astro";
-import FeaturesSection from "../components/sections/FeaturesSection.astro";
-import PricingSection from "../components/sections/PricingSection.astro";
-import CTASection from "../components/sections/CTASection.astro";
-import TestimonialsSection from "../components/sections/TestimonialsSection.astro";
-import Footer from "../components/sections/Footer.astro";
+import Statement from "../components/sections/Statement.astro";
+import Features from "../components/sections/Features.astro";
+import Numbers from "../components/sections/Numbers.astro";
+import Quote from "../components/sections/Quote.astro";
+import Pricing from "../components/sections/Pricing.astro";
+import Faq from "../components/sections/Faq.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import { workflowScenes, faqs } from "../lib/content";
 ---
 
-<MarketingLayout>
-  <IntroScreen client:load />
-  <Header />
-  <main>
-    <Hero />
-    <ProblemSection />
-    <FeaturesSection />
-    <PricingSection />
-    <CTASection />
-    <TestimonialsSection />
-  </main>
-  <Footer />
+<MarketingLayout intro>
+  <Hero />
+  <ScrollReader id="read" label="How MediCoder reads a clinical note" scenes={workflowScenes} doneStatus="Coded · 2 HCCs" />
+  <Statement
+    eyebrow="Our approach"
+    text="Risk adjustment shouldn't wait on months of EHR integration. Upload notes from any EHR, in any format, and see the revenue your documentation has [[already earned|a]] — in seconds, not weeks."
+    link={{ label: "See how it works", href: "/how-it-works/" }}
+  />
+  <Features />
+  <Numbers />
+  <Quote />
+  <Pricing />
+  <Faq items={[faqs.noIntegration, faqs.model, faqs.hipaa, faqs.speed, faqs.audit, faqs.ffs]} />
+  <CtaBand />
 </MarketingLayout>

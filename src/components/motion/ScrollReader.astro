@@ -1,0 +1,638 @@
+---
+// Pinned "reader": scenes play in sequence inside one sticky viewport. Reaching a
+// scene reads it in word by word; flagged phrases get underlined and their cards
+// materialise alongside. `encrypt` scenes then turn every word into ciphertext.
+import RaWords from "./RaWords.astro";
+import { plainReadAlong } from "../../lib/readAlong";
+
+export type ReaderChip = {
+  kind?: "code" | "evidence" | "lock";
+  /** For chips not tied to a phrase: show when reading starts or when the scene ends. */
+  when?: "start" | "end";
+  code: string;
+  tag?: string;
+  strong?: boolean;
+  desc: string;
+};
+
+export type ReaderScene = {
+  step: string;
+  status: string;
+  /** Status once an `encrypt` scene has finished reading. */
+  statusAfter?: string;
+  encrypt?: boolean;
+  size: "xl" | "lg";
+  text: string;
+  chipsTitle?: string;
+  chips?: Record<string, ReaderChip>;
+  foot?: string;
+};
+
+interface Props {
+  id?: string;
+  label: string;
+  scenes: ReaderScene[];
+  doneStatus: string;
+}
+
+const { id, label, scenes, doneStatus } = Astro.props;
+
+---
+
+<section class="reader" id={id} data-scroll-reader data-done={doneStatus} aria-label={label} style={`--scenes:${scenes.length}`}>
+  <div class="pin">
+    <div class="container stage">
+      <div class="status-row" aria-hidden="true">
+        <span class="status"><i class="orb"></i><span class="status-text">{scenes[0].status}</span></span>
+      </div>
+
+      <div class="scenes">
+        {
+          scenes.map((s, si) => (
+            <div
+              class:list={["scene", { solo: !s.chips, active: si === 0, encrypt: s.encrypt }]}
+              data-status={s.status}
+              data-status-after={s.statusAfter}
+            >
+              <div class="copy">
+                <p class="sr-only">{plainReadAlong(s.text)}</p>
+                <p class:list={["ra", `ra-${s.size === "xl" ? "xl" : "md"}`]} aria-hidden="true">
+                  <RaWords
+                    text={s.text}
+                    cipher={s.encrypt}
+                    evidence={Object.entries(s.chips ?? {}).filter(([, c]) => c.kind === "evidence").map(([k]) => k)}
+                  />
+                </p>
+                {s.foot && <p class="foot">{s.foot}</p>}
+              </div>
+
+              {s.chips && (
+                <aside class="chips">
+                  <p class="chips-title">{s.chipsTitle ?? "Suggested codes"}</p>
+                  {Object.entries(s.chips).map(([cid, c]) => (
+                    <div class:list={["chip", `k-${c.kind ?? "code"}`]} data-chip={cid} data-when={c.when}>
+                      <div class="row">
+                        <span class="code">
+                          {c.kind === "lock" && (
+                            <svg class="lock" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                              <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                              <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke-linecap="round" />
+                            </svg>
+                          )}
+                          {c.code}
+                        </span>
+                        {c.tag && <span class:list={["chip-tag", { strong: c.strong }]}>{c.tag}</span>}
+                      </div>
+                      <div class="desc">{c.desc}</div>
+                    </div>
+                  ))}
+                </aside>
+              )}
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="rail" aria-hidden="true">
+        {
+          scenes.map((s, si) => (
+            <div class:list={["step", { active: si === 0 }]}>
+              <b>
+                0{si + 1}&nbsp;&nbsp;{s.step}
+              </b>
+              <span class="bar">
+                <i></i>
+              </span>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="hint" aria-hidden="true">Keep scrolling <span>↓</span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reader {
+    position: relative;
+    /* One slice of scroll per scene; each scene plays itself once reached. */
+    height: calc(100svh + var(--scenes) * 85svh);
+  }
+
+  .pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .stage {
+    position: relative;
+    height: 100%;
+    padding-top: calc(var(--header-h) + 20px);
+    padding-bottom: 32px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+  }
+
+  /* Status pill */
+  .status-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 34px;
+    padding: 0 14px 0 13px;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+
+  .orb {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .orb::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1.5px solid var(--green-lift);
+    opacity: 0;
+    animation: pulse 1.6s var(--ease) infinite;
+  }
+
+  .reader.done .orb::after {
+    animation: none;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.6); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  /* Scenes */
+  .scenes {
+    position: relative;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 30%);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.7s var(--ease);
+    pointer-events: none;
+  }
+
+  .scene.solo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scene.active {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .scene.past {
+    transform: translateY(-18px);
+  }
+
+  .scene.solo .ra {
+    max-width: 15ch;
+  }
+
+  .foot {
+    margin: 28px 0 0;
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
+  /* Phrase variants */
+  .ra :global(.ph.ev) {
+    background-image: linear-gradient(var(--line-strong), var(--line-strong));
+  }
+
+  .ra :global(.ph.ev.hit) {
+    background-size: 100% 1px;
+  }
+
+  :global(.js) .ra :global(.ph.ev.hit .w) {
+    color: var(--ink);
+  }
+
+  /* Encrypt scenes: each word is covered by its ciphertext once sealed. */
+  /* inline-block keeps each word on one line so its overlay covers it whole */
+  .encrypt :global(.w) {
+    position: relative;
+    display: inline-block;
+  }
+
+  .encrypt :global(.w)::after {
+    content: attr(data-c);
+    position: absolute;
+    inset: -0.06em -0.04em;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 0.52em;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--green);
+    background: var(--bg);
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
+  }
+
+  .encrypt :global(.w.enc)::after {
+    opacity: 1;
+  }
+
+  /* Cards */
+  .chips {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chips-title {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .chip {
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-card);
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    filter: blur(6px);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.7s var(--ease),
+      filter 0.5s var(--ease);
+  }
+
+  .chip.show {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .code {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .chip-tag {
+    flex: none;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--surface-2);
+    color: var(--ink-2);
+  }
+
+  .chip-tag.strong {
+    background: var(--green);
+    color: var(--on-green);
+  }
+
+  .desc {
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  .chip.k-evidence {
+    padding: 10px 14px;
+    background: transparent;
+    box-shadow: none;
+    border-style: dashed;
+    border-color: var(--line-strong);
+  }
+
+  .chip.k-evidence .code {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .chip.k-evidence .desc {
+    margin-top: 2px;
+  }
+
+  .chip.k-lock .code {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 16px;
+  }
+
+  .lock {
+    color: var(--green);
+  }
+
+  /* Step rail */
+  .rail {
+    display: grid;
+    grid-template-columns: repeat(var(--steps, 3), 1fr);
+    grid-auto-flow: column;
+    gap: 20px;
+  }
+
+  .step {
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
+  .step b {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+
+  .step.active b,
+  .step.done b {
+    color: var(--ink);
+  }
+
+  .bar {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .bar i {
+    display: block;
+    height: 100%;
+    background: var(--green);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.25s linear;
+  }
+
+  .hint {
+    position: absolute;
+    left: 50%;
+    bottom: 76px;
+    translate: -50% 0;
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-3);
+    opacity: 0;
+    transition: opacity 0.5s var(--ease);
+  }
+
+  .reader.waiting .hint {
+    opacity: 1;
+  }
+
+  .hint span {
+    display: inline-block;
+    animation: nudge 1.6s ease-in-out infinite;
+  }
+
+  @keyframes nudge {
+    50% { transform: translateY(4px); }
+  }
+
+  @media (max-width: 900px) {
+    .scene {
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 24px;
+    }
+
+    .chips {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+    }
+
+    .chips-title {
+      grid-column: 1 / -1;
+      margin-bottom: 0;
+    }
+
+    .chip {
+      padding: 10px 12px;
+    }
+
+    .chip .desc,
+    .chip.k-evidence {
+      display: none;
+    }
+
+    .code {
+      font-size: 15px;
+    }
+
+    .hint {
+      bottom: 64px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene,
+    .chip {
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { playWords, punctuationPause, type WordPlayer } from "../../lib/wordPlayer";
+
+  // Section-triggered: the reader is split into one scroll slice per scene.
+  // Reaching a scene types it out to the end on its own; scrolling on moves to
+  // the next scene (finishing the previous one instantly if still playing).
+  const PACE = { xl: 20, lg: 10 }; // ms per character
+  const PHRASE_PAUSE = 300;
+  const SEAL_PACE = 28; // ms per word for the encrypt pass
+
+  type Scene = {
+    el: HTMLElement;
+    status: string;
+    statusAfter: string;
+    encrypt: boolean;
+    words: HTMLElement[];
+    ends: (HTMLElement | null)[]; // phrase that word i completes
+    chips: Map<string, HTMLElement>;
+    step: HTMLElement;
+    bar: HTMLElement;
+    pace: number;
+    reading?: WordPlayer;
+    sealing?: WordPlayer;
+  };
+
+  const isDone = (s?: Scene) => !!s && (s.encrypt ? !!s.sealing?.done : !!s.reading?.done);
+
+  function setup(root: HTMLElement) {
+    const stepEls = Array.from(root.querySelectorAll<HTMLElement>(".step"));
+    const statusText = root.querySelector<HTMLElement>(".status-text");
+    root.style.setProperty("--steps", String(stepEls.length));
+
+    const scenes: Scene[] = Array.from(root.querySelectorAll<HTMLElement>(".scene")).map((el, si) => {
+      const words = Array.from(el.querySelectorAll<HTMLElement>(".copy .w"));
+      return {
+        el,
+        status: el.dataset.status ?? "",
+        statusAfter: el.dataset.statusAfter ?? el.dataset.status ?? "",
+        encrypt: el.classList.contains("encrypt"),
+        words,
+        ends: words.map((w) => {
+          const ph = w.closest<HTMLElement>("[data-phrase]");
+          return ph && ph.querySelector(".w:last-of-type") === w ? ph : null;
+        }),
+        chips: new Map(Array.from(el.querySelectorAll<HTMLElement>("[data-chip]")).map((c) => [c.dataset.chip!, c])),
+        step: stepEls[si],
+        bar: stepEls[si].querySelector<HTMLElement>(".bar i")!,
+        pace: el.querySelector(".ra-xl") ? PACE.xl : PACE.lg,
+      };
+    });
+    const last = scenes.length - 1;
+    let current = -1;
+
+    const showChips = (s: Scene, when: "start" | "end") =>
+      s.chips.forEach((c) => c.dataset.when === when && c.classList.add("show"));
+
+    const sync = () => {
+      const s = scenes[current];
+      if (!s) return;
+      const finished = isDone(s);
+      root.classList.toggle("waiting", finished && current < last);
+      root.classList.toggle("done", finished && current === last);
+      if (!statusText) return;
+      if (finished && current === last) statusText.textContent = root.dataset.done ?? "";
+      else statusText.textContent = s.encrypt && s.reading?.done ? s.statusAfter : s.status;
+    };
+
+    const seal = (s: Scene) => {
+      if (s.sealing) return;
+      s.sealing = playWords(s.words, {
+        by: "word",
+        className: "enc",
+        pace: SEAL_PACE,
+        delay: 450,
+        onDone: () => {
+          showChips(s, "end");
+          sync();
+        },
+      });
+      sync();
+    };
+
+    const play = (s: Scene) => {
+      if (s.reading) return;
+      showChips(s, "start");
+      s.reading = playWords(s.words, {
+        pace: s.pace,
+        delay: 350, // let the scene fade in first
+        pauseAfter: (i) => (s.ends[i] ? PHRASE_PAUSE : punctuationPause(s.words[i])),
+        onWord: (i) => {
+          const ph = s.ends[i];
+          if (ph) {
+            ph.classList.add("hit");
+            s.chips.get(ph.dataset.phrase!)?.classList.add("show");
+          }
+          s.bar.style.transform = `scaleX(${(i + 1) / s.words.length})`;
+        },
+        onDone: () => (s.encrypt ? seal(s) : sync()),
+      });
+    };
+
+    const complete = (s: Scene) => {
+      play(s);
+      s.reading!.finish();
+      s.sealing?.finish();
+    };
+
+    const goTo = (index: number) => {
+      if (index === current) return;
+      current = index;
+      scenes.forEach((s, i) => {
+        if (i < index) complete(s); // scrolled past: show it finished
+        s.el.classList.toggle("active", i === index);
+        s.el.classList.toggle("past", i < index);
+        s.step.classList.toggle("active", i === index);
+        s.step.classList.toggle("done", i < index);
+      });
+      play(scenes[index]);
+      sync();
+    };
+
+    return () => {
+      const rect = root.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // Start once the pinned stage is mostly on screen.
+      if (rect.top > vh * 0.35 || rect.bottom < 0) return;
+      const max = rect.height - vh;
+      const progress = max > 0 ? Math.min(0.999, Math.max(0, -rect.top / max)) : 0.999;
+      goTo(Math.floor(progress * scenes.length));
+    };
+  }
+
+  const updates = Array.from(document.querySelectorAll<HTMLElement>("[data-scroll-reader]")).map(setup);
+  let ticking = false;
+  const schedule = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      updates.forEach((u) => u());
+    });
+  };
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  schedule();
+</script>

@@ -1,0 +1,224 @@
+---
+import Reveal from "../motion/Reveal.svelte";
+import { tiers } from "../../lib/content";
+import { BOOK_URL } from "../../lib/site";
+
+interface Props {
+  showHead?: boolean;
+}
+
+const { showHead = true } = Astro.props;
+---
+
+<section class:list={["pricing", showHead ? "section" : "tight"]} id="pricing">
+  <div class="container">
+    {
+      showHead && (
+        <div class="head">
+          <p class="eyebrow">Pricing</p>
+          <h2 class="h2">
+            Start with a free 25-chart audit. <span class="muted">Scale when you're ready.</span>
+          </h2>
+        </div>
+      )
+    }
+
+    <div class="cards">
+      {
+        tiers.map((t, i) => (
+          <Reveal client:visible delay={i * 70} distance={24}>
+            <article class:list={["card", "tier", { popular: t.popular }]}>
+              <div class="tier-top">
+                <h3 class="h3">{t.name}</h3>
+                {t.popular && <span class="badge">Most popular</span>}
+              </div>
+              <p class="tagline">{t.tagline}</p>
+              <p class="figure">
+                {t.figure}
+                <span>{t.unit}</span>
+              </p>
+              <ul>
+                {t.perks.map((p) => (
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={BOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class:list={["btn", t.popular ? "btn-light" : i === 0 ? "btn-primary" : "btn-ghost"]}
+              >
+                {t.cta}
+              </a>
+            </article>
+          </Reveal>
+        ))
+      }
+    </div>
+
+    {
+      showHead && (
+        <a href="/pricing/" class="link-arrow more">
+          Compare plans
+        </a>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .tight {
+    padding-bottom: var(--section-pad);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .cards > :global(astro-island),
+  .cards :global(.reveal) {
+    display: flex;
+    flex: 1;
+  }
+
+  .tier {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 24px 24px;
+  }
+
+  .tier.popular {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--on-green);
+  }
+
+  .tier-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .popular .h3 {
+    color: var(--on-green);
+  }
+
+  .badge {
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(250, 249, 247, 0.14);
+    color: var(--on-green);
+  }
+
+  .tagline {
+    margin: 8px 0 0;
+    min-height: 3em;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+
+  .popular .tagline {
+    color: var(--on-green-2);
+  }
+
+  .figure {
+    margin: 28px 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 46px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .popular .figure {
+    color: var(--on-green);
+  }
+
+  .figure span {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    letter-spacing: 0;
+    color: var(--ink-3);
+  }
+
+  .popular .figure span {
+    color: var(--on-green-2);
+  }
+
+  ul {
+    margin: 0 0 28px;
+    padding: 20px 0 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+    border-top: 1px solid var(--line);
+    flex: 1;
+    align-content: start;
+  }
+
+  .popular ul {
+    border-top-color: rgba(250, 249, 247, 0.14);
+  }
+
+  li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  .popular li {
+    color: var(--on-green);
+  }
+
+  li svg {
+    flex: none;
+    margin-top: 2px;
+    color: var(--green-lift);
+  }
+
+  .popular li svg {
+    color: #9cc3b3;
+  }
+
+  .tier .btn {
+    width: 100%;
+  }
+
+  .more {
+    margin-top: 32px;
+  }
+
+  @media (max-width: 1040px) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .tagline {
+      min-height: 0;
+    }
+  }
+</style>

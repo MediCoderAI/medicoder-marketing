@@ -1,14 +1,19 @@
 ---
 import "../styles/global.css";
+import Header from "../components/site/Header.astro";
+import Footer from "../components/site/Footer.astro";
+import IntroScreen from "../components/motion/IntroScreen.svelte";
 
 interface Props {
   title?: string;
   description?: string;
+  intro?: boolean;
 }
 
 const {
   title = "MediCoder.AI | Risk Adjustment Intelligence",
   description = "Surface missed HCCs, calculate RAF scores, and close revenue gaps — from any clinical note, any format, any EHR.",
+  intro = false,
 } = Astro.props;
 ---
 
@@ -18,18 +23,32 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/png" href="/MediCoderAIInverted.png" />
+    <meta name="theme-color" content="#faf9f7" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Manrope:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
       rel="stylesheet"
     />
+    <script is:inline>document.documentElement.classList.add("js");</script>
+    {
+      intro && (
+        <script is:inline>
+          if (location.hash) document.documentElement.classList.add("skip-intro");
+        </script>
+      )
+    }
     <title>{title}</title>
   </head>
   <body>
-    <div class="shell">
+    {intro && <IntroScreen client:load />}
+    <Header />
+    <main>
       <slot />
-    </div>
+    </main>
+    <Footer />
   </body>
 </html>
