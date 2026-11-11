@@ -189,6 +189,10 @@ export const faqs = {
     q: "Do you support fee-for-service coding?",
     a: "Yes. MediCoder.AI also generates ICD-10-CM, CPT and HCPCS codes for fee-for-service billing workflows.",
   },
+  pfs: {
+    q: "Do you support traditional Medicare?",
+    a: "Yes. Alongside HCC risk adjustment for Medicare Advantage, MediCoder.AI supports fee-for-service coding for traditional Medicare under the Medicare Physician Fee Schedule (PFS).",
+  },
   baa: {
     q: "Will you sign a BAA?",
     a: "Yes. A Business Associate Agreement is available — email contact@medicoder.ai or book a call to set one up.",
